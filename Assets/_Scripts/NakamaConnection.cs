@@ -15,6 +15,7 @@ namespace _Scripts
         ISession _session;
 
         private string _ticket;
+        private string _matchID;
 
         async void Start()
         {
@@ -26,6 +27,7 @@ namespace _Scripts
                 await _socket.ConnectAsync(_session, true);
 
                 _socket.ReceivedMatchmakerMatched += OnReceivedMatchMakerMatched;
+                _socket.ReceivedMatchState += OnReceivedMatchState;
 
                 print(_session);
                 print(_socket);
@@ -56,6 +58,7 @@ namespace _Scripts
             {
                 print("Found matchmaker");
                 var match = await _socket.JoinMatchAsync(matchmaker);
+                _matchID = match.Id;
                 print("joined matchmaker");
                 print(match.Self.SessionId);
                 foreach (var users in match.Presences)
@@ -66,6 +69,28 @@ namespace _Scripts
             catch (Exception e)
             {
                 print(e.Message);
+            }
+        }
+
+        public async void Ping()
+        {
+            print("Sending Ping!");
+            await _socket.SendMatchStateAsync(_matchID, 1, "", null);
+        }
+
+        async void OnReceivedMatchState(IMatchState matchState)
+        {
+            if (matchState.OpCode == 1)
+            {
+                print("Received Pong");
+                print("Sending Ping!");
+                await _socket.SendMatchStateAsync(_matchID, 2, "", new[] { matchState.UserPresence });
+            }
+            else if (matchState.OpCode == 2)
+            {
+                print("Received Ping");
+                print("Sending Pong!");
+                await _socket.SendMatchStateAsync(_matchID, 1, "", new[] { matchState.UserPresence });
             }
         }
     }
