@@ -18,8 +18,8 @@ namespace _Scripts
 
         async void Start()
         {
-            // try
-            // {
+            try
+            {
                 _client = new Client(_scheme, _host, _port, _key, UnityWebRequestAdapter.Instance);
                 _session = await _client.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier);
                 _socket = _client.NewSocket();
@@ -29,36 +29,43 @@ namespace _Scripts
 
                 print(_session);
                 print(_socket);
-            // }
-            // catch (Exception e)
-            // {
-            //     Debug.Log(e.Message);
-            // }
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+            }
         }
 
         public async void FindMatch()
         {
             print("FindMatch");
-            // try
-            // {
+            try
+            {
                 var matchmakingTicker = await _socket.AddMatchmakerAsync("*", 2, 2, null, null);
                 _ticket = matchmakingTicker.Ticket;
-            // }
-            // catch (Exception e)
-            // {
-            //     Debug.Log(e.Message);
-            // }
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+            }
         }
 
         async void OnReceivedMatchMakerMatched(IMatchmakerMatched matchmaker)
         {
-            print("Found matchmaker");
-            var match = await _socket.JoinMatchAsync(matchmaker);
-            print("joined matchmaker");
-            print(match.Self.SessionId);
-            foreach (var users in match.Presences)
+            try
             {
-                Debug.Log(users.SessionId);
+                print("Found matchmaker");
+                var match = await _socket.JoinMatchAsync(matchmaker);
+                print("joined matchmaker");
+                print(match.Self.SessionId);
+                foreach (var users in match.Presences)
+                {
+                    Debug.Log(users.SessionId);
+                }
+            }
+            catch (Exception e)
+            {
+                print(e.Message);
             }
         }
     }
