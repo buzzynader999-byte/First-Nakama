@@ -8,6 +8,7 @@ namespace _Scripts.Entities
     {
         private bool _isInputChanged;
         public bool IsInputChanged => _isInputChanged;
+        [SerializeField] PlayerMovementController playerMovementController;
         public PlayerInputControllerDetails InputDetails { set; get; } = new PlayerInputControllerDetails();
 
         private void Update()
@@ -19,6 +20,8 @@ namespace _Scripts.Entities
             _isInputChanged = CheckForInptChange(horizontal);
 
             InputDetails.HorizontalInput = horizontal;
+            
+            playerMovementController.SetHorizontal(InputDetails.HorizontalInput);
         }
 
         private bool CheckForInptChange(float horizontal)
