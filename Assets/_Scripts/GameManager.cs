@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using _Scripts.Entities;
 using Nakama;
 using UnityEngine;
@@ -10,14 +11,17 @@ namespace _Scripts
     {
         [SerializeField] NakamaConnection nakamaConnection;
         [SerializeField] MainMenu mainMenu;
+        public NakamaConnection NakamaConnection => nakamaConnection;
         private ISocket _socket => nakamaConnection.Socket;
         private IUserPresence _localUser;
         private IUserPresence _localPlayer;
         Dictionary<string, GameObject> _players = new Dictionary<string, GameObject>();
         private IMatch _currentMatch;
+        public static GameManager Instance;
 
         private void Awake()
         {
+            Instance = this;
             nakamaConnection.Connect();
         }
 
@@ -34,6 +38,15 @@ namespace _Scripts
         {
             //...
             Debug.Log("Received match state");
+            switch (matchState.OpCode)
+            {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+            }
         }
 
         private void OnReceivedMatchPresence(IMatchPresenceEvent matchPresenceEvent)
@@ -90,17 +103,18 @@ namespace _Scripts
             _players.Add(targetUser.SessionId, newUser);
         }
 
-        private async void PlayerDeath(GameObject targetPlayer)
+        private void PlayerDeath(GameObject targetPlayer)
         {
             Debug.Log("Player Dead");
-            await _socket.SendMatchStateAsync(_currentMatch.Id, OpCodes.Died,
-                MatchDataJson.Died(targetPlayer.transform.position));
+            SendMatchState(OpCodes.Died, MatchDataJson.Died(targetPlayer.transform.position));
         }
 
         public void FindMatch()
         {
             nakamaConnection.FindMatch();
         }
+
+        public void SendMatchState(long op, string state) => _socket.SendMatchStateAsync(_currentMatch.Id, op, state);
 
         public async void SendTestMatchState()
         {
@@ -113,11 +127,5 @@ namespace _Scripts
                 Debug.Log(e);
             }
         }
-    }
-
-    public static class OpCodes
-    {
-        public static long Died = 0;
-        public static long Shoot = 1;
     }
 }

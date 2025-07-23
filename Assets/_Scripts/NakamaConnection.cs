@@ -28,7 +28,7 @@ namespace _Scripts
                 await _socket.ConnectAsync(_session, true);
 
                 _socket.ReceivedMatchmakerMatched += OnReceivedMatchMakerMatched;
-                _socket.ReceivedMatchState += OnReceivedMatchState;
+                //_socket.ReceivedMatchState += OnReceivedMatchState;
 
                 print(_session);
                 print(_socket);
@@ -73,13 +73,13 @@ namespace _Scripts
             }
         }
 
-        public async void Ping()
+        /*public async void Ping()
         {
             print("Sending Ping!");
             await _socket.SendMatchStateAsync(_matchID, 1, "", null);
-        }
+        }*/
 
-        async void OnReceivedMatchState(IMatchState matchState)
+        /*async void OnReceivedMatchState(IMatchState matchState)
         {
             if (matchState.OpCode == 1)
             {
@@ -93,6 +93,6 @@ namespace _Scripts
                 print("Sending Pong!");
                 await _socket.SendMatchStateAsync(_matchID, 1, "", new[] { matchState.UserPresence });
             }
-        }
+        }*/
     }
 }
