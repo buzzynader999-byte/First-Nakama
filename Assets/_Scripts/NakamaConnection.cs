@@ -12,12 +12,13 @@ namespace _Scripts
         private readonly string _key = "defaultkey";
         IClient _client;
         ISocket _socket;
+        public ISocket Socket=> _socket;
         ISession _session;
 
         private string _ticket;
         private string _matchID;
-
-        async void Start()
+        
+        public async void Connect()
         {
             try
             {
