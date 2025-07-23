@@ -14,7 +14,7 @@ namespace _Scripts.Entities
         private void Update()
         {
             var horizontal = GatherInput.Controll.Player.Move.ReadValue<Vector2>().x;
-            print(horizontal);
+            //print(horizontal);
             //var jump = GatherInput.Controll.Player.Jump.ReadValue<Vector2>();
 
             _isInputChanged = CheckForInptChange(horizontal);

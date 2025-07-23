@@ -7,6 +7,7 @@ namespace _Scripts.Entities
     {
         [SerializeField] Rigidbody2D rigidbody2D;
         private float _horizontal;
+        [SerializeField] private float moveSpeed;
 
         private void FixedUpdate()
         {
@@ -15,7 +16,7 @@ namespace _Scripts.Entities
 
         private void PerformMovement()
         {
-           rigidbody2D.linearVelocity = Vector2.right * _horizontal;
+           rigidbody2D.linearVelocity =  new Vector2(_horizontal * moveSpeed, rigidbody2D.linearVelocity.y);
         }
 
         public void SetHorizontal(float horizontal)

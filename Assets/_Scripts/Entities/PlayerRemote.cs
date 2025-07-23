@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using Nakama;
+using Nakama.TinyJson;
 using UnityEngine;
 
 namespace _Scripts.Entities
@@ -34,11 +37,23 @@ namespace _Scripts.Entities
                     Debug.Log("Died");
                     break;
                 case OpCodes.Input:
+                    SetInputFromState(matchState.State);
                     Debug.Log("Input");
                     break;
                 case OpCodes.VelocityAndPosition:
                     break;
             }
+        }
+
+        private void SetInputFromState(byte[] state)
+        {
+            var stateDictionary = GetStateAsDictionary(state);
+            movementController.SetHorizontal(float.Parse(stateDictionary["horizontalInput"]));
+        }
+
+        private IDictionary<string, string> GetStateAsDictionary(byte[] state)
+        {
+            return Encoding.UTF8.GetString(state).FromJson<Dictionary<string, string>>();
         }
 
         void LateUpdate()
