@@ -90,7 +90,7 @@ namespace _Scripts.Managers
             if (_players.ContainsKey(targetUser.SessionId))
                 return;
             var isLocalUser = _localUser.SessionId == targetUser.SessionId;
-            var newUser = PlayerFactory.Instance.GetNewPlayer(isLocalUser);
+            var newUser = PlayerFactory.instance.GetNewPlayer(isLocalUser);
             if (!isLocalUser)
                 newUser.GetComponent<PlayerRemote>().NetworkData = new RemotePlayerNetworkData(matchID, targetUser);
             else
