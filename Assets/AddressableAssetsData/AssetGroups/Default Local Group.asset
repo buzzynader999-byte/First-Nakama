@@ -14,7 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Default Local Group
   m_GUID: c9ba9f6fc6383784984e3ffa7fa97716
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: cfa3fd16eb5d1834bb939eec6c412d15
+    m_Address: Assets/_Scenes/Game.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: adb7ed25545ec594fa08d569c68f8998, type: 2}
   m_SchemaSet:
