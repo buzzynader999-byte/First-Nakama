@@ -37,12 +37,12 @@ namespace _Scripts
         private void OnReceivedMatchState(IMatchState matchState)
         {
             //...
-            Debug.Log("Received match state");
             switch (matchState.OpCode)
             {
                 case 1:
                     break;
                 case 2:
+                    print("Input state received");
                     break;
                 case 3:
                     break;
@@ -77,7 +77,6 @@ namespace _Scripts
                 {
                     SpawnPlayer(match.Id, user);
                 }
-
                 _currentMatch = match;
             }
             catch (Exception e)
@@ -90,7 +89,7 @@ namespace _Scripts
         {
             if (_players.ContainsKey(targetUser.SessionId))
                 return;
-            var isLocalUser = _localUser.SessionId != targetUser.SessionId;
+            var isLocalUser = _localUser.SessionId == targetUser.SessionId;
             var newUser = PlayerFactory.Instance.GetNewPlayer(isLocalUser);
             if (!isLocalUser)
                 newUser.GetComponent<PlayerRemote>().NetworkData = new RemotePlayerNetworkData(matchID, targetUser);
@@ -98,6 +97,7 @@ namespace _Scripts
             {
                 _localPlayer = _localUser;
                 newUser.GetComponent<PlayerHealthController>().PlayerDeath += PlayerDeath;
+                //...
             }
 
             _players.Add(targetUser.SessionId, newUser);

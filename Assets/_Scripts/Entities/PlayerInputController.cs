@@ -18,7 +18,10 @@ namespace _Scripts.Entities
             //var jump = GatherInput.Controll.Player.Jump.ReadValue<Vector2>();
 
             _isInputChanged = CheckForInptChange(horizontal);
-
+            if (_isInputChanged)
+            {
+                print("input changed");
+            }
             InputDetails.HorizontalInput = horizontal;
             
             playerMovementController.SetHorizontal(InputDetails.HorizontalInput);

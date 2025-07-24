@@ -15,6 +15,8 @@ namespace _Scripts.Entities
         [SerializeField] Rigidbody2D rigidbody2D;
         [SerializeField] PlayerMovementController movementController;
         float _lerpTimer = 0;
+        private Vector3 _targetPosition;
+        private Vector3 _lastPosition;
 
         private void Start()
         {
@@ -38,22 +40,36 @@ namespace _Scripts.Entities
                     break;
                 case OpCodes.Input:
                     SetInputFromState(matchState.State);
-                    Debug.Log("Input");
+                    //print("input from remote");
                     break;
                 case OpCodes.VelocityAndPosition:
+                    UpdateVelocityAndPositionFromState(matchState.State);
                     break;
             }
         }
+
+        private void UpdateVelocityAndPositionFromState(byte[] state)
+        {
+            var stateDictionary = GetStateAsDictionary(state);
+
+            rigidbody2D.linearVelocity = new Vector2(float.Parse(stateDictionary["velocity.x"]),
+                float.Parse(stateDictionary["velocity.y"]));
+
+            var position = new Vector3(
+                float.Parse(stateDictionary["position.x"]),
+                float.Parse(stateDictionary["position.y"]),
+                0);
+            _lastPosition = transform.position;
+            _targetPosition = Vector3.Lerp(transform.position, position, lerpTime / _lerpTimer);
+        }
+
+        private IDictionary<string, string> GetStateAsDictionary(byte[] state) =>
+            Encoding.UTF8.GetString(state).FromJson<Dictionary<string, string>>();
 
         private void SetInputFromState(byte[] state)
         {
             var stateDictionary = GetStateAsDictionary(state);
             movementController.SetHorizontal(float.Parse(stateDictionary["horizontalInput"]));
-        }
-
-        private IDictionary<string, string> GetStateAsDictionary(byte[] state)
-        {
-            return Encoding.UTF8.GetString(state).FromJson<Dictionary<string, string>>();
         }
 
         void LateUpdate()
@@ -63,6 +79,11 @@ namespace _Scripts.Entities
             {
                 //...
                 _lerpTimer = lerpTime;
+            }
+
+            if (_lerpTimer >= lerpTime)
+            {
+                transform.position = Vector3.Lerp(transform.position, _targetPosition, _lerpTimer / lerpTime);
             }
         }
 

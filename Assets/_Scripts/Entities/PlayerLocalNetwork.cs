@@ -26,8 +26,7 @@ namespace _Scripts.Entities
             }
 
             if (!playerInputController.IsInputChanged) return;
-            print("Syncing");
-            SendMessage(OpCodes.VelocityAndPosition, MatchDataJson.Input(playerInputController.InputDetails));
+            SendMessage(OpCodes.Input, MatchDataJson.Input(playerInputController.InputDetails));
         }
 
         private void SendMessage(long op, string state) => _gManager.SendMatchState(op, state);
