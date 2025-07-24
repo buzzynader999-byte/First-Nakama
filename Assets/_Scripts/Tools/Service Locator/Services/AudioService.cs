@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace _Scripts.Test_SL.Services
+namespace _Scripts.Tools.Service_Locator.Services
 {
     public class AudioService : IService
     {

@@ -5,11 +5,16 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3307722832019483495, guid: 4969347c1602d5d46ae501c141927582, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3307722832019483495, guid: 4969347c1602d5d46ae501c141927582, type: 3}
       propertyPath: m_Color.b
-      value: 0.33397114
+      value: 0.25787643
       objectReference: {fileID: 0}
     - target: {fileID: 3307722832019483495, guid: 4969347c1602d5d46ae501c141927582, type: 3}
       propertyPath: m_Color.g
@@ -17,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3307722832019483495, guid: 4969347c1602d5d46ae501c141927582, type: 3}
       propertyPath: m_Color.r
-      value: 0.7135216
+      value: 0.51629543
       objectReference: {fileID: 0}
     - target: {fileID: 4584087183307774230, guid: 4969347c1602d5d46ae501c141927582, type: 3}
       propertyPath: m_Name
@@ -68,6 +73,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1111375513848183271}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4584087183307774230, guid: 4969347c1602d5d46ae501c141927582, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8500454293040385654}
+    - targetCorrespondingSourceObject: {fileID: 4584087183307774230, guid: 4969347c1602d5d46ae501c141927582, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2208660364776782206}
   m_SourcePrefab: {fileID: 100100000, guid: 4969347c1602d5d46ae501c141927582, type: 3}
 --- !u!50 &1111375513848183271 stripped
 Rigidbody2D:
@@ -87,11 +101,32 @@ BoxCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3698029820426997990}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -102,7 +137,6 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &2208660364776782206

@@ -1,4 +1,6 @@
 ﻿using System;
+using _Scripts.Managers;
+using _Scripts.Tools;
 using UnityEngine;
 using UnityEngine.Serialization;
 

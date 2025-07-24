@@ -1,8 +1,7 @@
-﻿using System;
-using _Scripts.Test_SL.Services;
+﻿using _Scripts.Tools.Service_Locator.Services;
 using UnityEngine;
 
-namespace _Scripts.Test_SL
+namespace _Scripts.Tools.Service_Locator
 {
     public class ExampleUse : MonoBehaviour
     {

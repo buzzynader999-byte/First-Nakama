@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using _Scripts.Entities;
+using _Scripts.Tools;
 using Nakama;
 using UnityEngine;
 
-namespace _Scripts
+namespace _Scripts.Managers
 {
     public class GameManager : MonoBehaviour
     {

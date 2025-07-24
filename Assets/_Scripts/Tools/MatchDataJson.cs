@@ -3,7 +3,7 @@ using _Scripts.Entities;
 using Nakama.TinyJson;
 using UnityEngine;
 
-namespace _Scripts
+namespace _Scripts.Tools
 {
     public static class MatchDataJson
     {

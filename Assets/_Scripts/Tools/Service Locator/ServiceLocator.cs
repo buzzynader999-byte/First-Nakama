@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
-namespace _Scripts.Test_SL
+namespace _Scripts.Tools.Service_Locator
 {
     public static class ServiceLocator
     {
