@@ -15,8 +15,18 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: c9ba9f6fc6383784984e3ffa7fa97716
   m_SerializeEntries:
+  - m_GUID: 789de5cdb4420d34d8e304f7080a65da
+    m_Address: Assets/_Prefabs/Characters/Player Remore Variant.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cfa3fd16eb5d1834bb939eec6c412d15
     m_Address: Assets/_Scenes/Game.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d6081a3ee81fc844e9a04cef40baecae
+    m_Address: Assets/_Prefabs/Characters/Player Local Variant.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
