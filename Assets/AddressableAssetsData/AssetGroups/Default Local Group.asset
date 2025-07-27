@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: c9ba9f6fc6383784984e3ffa7fa97716
   m_SerializeEntries:
+  - m_GUID: 3c2da2416064cfb4aa976326171c1f82
+    m_Address: Hand Gun
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 789de5cdb4420d34d8e304f7080a65da
     m_Address: Player Remore Variant
     m_ReadOnly: 0
@@ -27,6 +32,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d6081a3ee81fc844e9a04cef40baecae
     m_Address: Player Local Variant
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e30b74af4738f964088c7550199256d7
+    m_Address: Bullet
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

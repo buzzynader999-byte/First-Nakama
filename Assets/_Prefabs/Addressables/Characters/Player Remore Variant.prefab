@@ -28,6 +28,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player Remore Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 4747913945994745614, guid: 4969347c1602d5d46ae501c141927582, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5966598361752700200, guid: 4969347c1602d5d46ae501c141927582, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
