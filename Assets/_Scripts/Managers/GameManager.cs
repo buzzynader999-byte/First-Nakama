@@ -15,7 +15,6 @@ namespace _Scripts.Managers
         private ISocket _socket => nakamaConnection.Socket;
         private IUserPresence _localUser;
         private IUserPresence _localPlayer;
-        Dictionary<string, GameObject> _players = new Dictionary<string, GameObject>();
         private IMatch _currentMatch;
         public static GameManager Instance;
 
@@ -51,16 +50,9 @@ namespace _Scripts.Managers
 
         private void OnReceivedMatchPresence(IMatchPresenceEvent matchPresenceEvent)
         {
-            foreach (var joinedOne in matchPresenceEvent.Joins)
-            {
-                SpawnPlayer(matchPresenceEvent.MatchId, joinedOne);
-            }
+            foreach (var joinedOne in matchPresenceEvent.Joins) SpawnPlayer(matchPresenceEvent.MatchId, joinedOne);
 
-            foreach (var leaved in matchPresenceEvent.Leaves)
-            {
-                Destroy(_players[leaved.SessionId]);
-                _players.Remove(leaved.SessionId);
-            }
+            foreach (var leaved in matchPresenceEvent.Leaves) PlayerSpawner.instance.Destroy(leaved.SessionId);
         }
 
         private async void OnReceivedMatchmakerMatched(IMatchmakerMatched matchmaker)
@@ -77,6 +69,7 @@ namespace _Scripts.Managers
                 {
                     SpawnPlayer(match.Id, user);
                 }
+
                 _currentMatch = match;
             }
             catch (Exception e)
@@ -85,22 +78,29 @@ namespace _Scripts.Managers
             }
         }
 
-        void SpawnPlayer(string matchID, IUserPresence targetUser)
+        async void SpawnPlayer(string matchID, IUserPresence targetUser)
         {
-            if (_players.ContainsKey(targetUser.SessionId))
-                return;
-            var isLocalUser = _localUser.SessionId == targetUser.SessionId;
-            var newUser = PlayerFactory.instance.GetNewPlayer(isLocalUser);
-            if (!isLocalUser)
-                newUser.GetComponent<PlayerRemote>().NetworkData = new RemotePlayerNetworkData(matchID, targetUser);
-            else
+            try
             {
-                _localPlayer = _localUser;
-                newUser.GetComponent<PlayerHealthController>().PlayerDeath += PlayerDeath;
-                //...
-            }
+                var isLocalUser = _localUser.SessionId == targetUser.SessionId;
+                var newUser = await PlayerSpawner.instance.SpawnPlayerAsync(targetUser, isLocalUser);
+                if (!isLocalUser)
+                {
+                    newUser.GetComponent<PlayerRemote>().NetworkData = new RemotePlayerNetworkData(matchID, targetUser);
+                }
+                else
+                {
+                    _localPlayer = _localUser;
+                    newUser.GetComponent<PlayerHealthController>().PlayerDeath += PlayerDeath;
+                    //...
+                }
+                newUser.GetComponent<Player>().ChangeColor(isLocalUser);
 
-            _players.Add(targetUser.SessionId, newUser);
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+            }
         }
 
         private void PlayerDeath(GameObject targetPlayer)
