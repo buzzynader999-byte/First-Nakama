@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.InputSystem;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -69,10 +70,7 @@ public class ClientCoordinator : MonoBehaviour
             currentOverlayGameobject =
                 Addressables.InstantiateAsync(typeof(T).Name, panelCanvas.transform).WaitForCompletion();
         }
-
-
-        // EventBroker.CallOnChangeInputBlockers(1);
-
+        
         Overlay overlay = currentOverlayGameobject.GetComponent<T>();
 
         if (overlayList.Count != 0 && !showOnTop)
@@ -185,7 +183,7 @@ public class ClientCoordinator : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             if (overlayList.Count > 0)
             {

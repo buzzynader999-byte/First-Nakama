@@ -13,6 +13,8 @@ namespace _Scripts
         IClient _client;
         ISocket _socket;
         public ISocket Socket=> _socket;
+        public static Action OnSocketCreated;
+
         ISession _session;
 
         private string _ticket;
@@ -25,6 +27,7 @@ namespace _Scripts
                 _client = new Client(_scheme, _host, _port, _key, UnityWebRequestAdapter.Instance);
                 _session = await _client.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier);
                 _socket = _client.NewSocket();
+                OnSocketCreated?.Invoke();
                 await _socket.ConnectAsync(_session, true);
 
                 _socket.ReceivedMatchmakerMatched += OnReceivedMatchMakerMatched;

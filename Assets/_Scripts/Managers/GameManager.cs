@@ -2,35 +2,55 @@
 using System.Collections.Generic;
 using _Scripts.Entities;
 using _Scripts.Tools;
+using _Scripts.UI;
 using Nakama;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.SceneManagement;
 
 namespace _Scripts.Managers
 {
     public class GameManager : MonoBehaviour
     {
         [SerializeField] NakamaConnection nakamaConnection;
-        [SerializeField] MainMenu mainMenu;
         public NakamaConnection NakamaConnection => nakamaConnection;
         private ISocket _socket => nakamaConnection.Socket;
         private IUserPresence _localUser;
         private IUserPresence _localPlayer;
         private IMatch _currentMatch;
         public static GameManager Instance;
+        [SerializeField] AssetReference gameScene;
+        [SerializeField] AssetReference mainMenuScene;
 
         private void Awake()
         {
             Instance = this;
             nakamaConnection.Connect();
+            
+        }
+
+        private void OnEnable()
+        {
+            NakamaConnection.OnSocketCreated += SubscribeToSocket;
+        }
+
+        private void OnDisable()
+        {
+            NakamaConnection.OnSocketCreated -= SubscribeToSocket;
         }
 
         private void Start()
         {
+            UIManager.Instance.OpenMainMenu();
+        }
+
+        void SubscribeToSocket()
+        {
             var mainThread = UnityMainThreadDispatcher.Instance();
-            nakamaConnection.Socket.ReceivedMatchmakerMatched +=
+            _socket.ReceivedMatchmakerMatched +=
                 m => mainThread.Enqueue(() => OnReceivedMatchmakerMatched(m));
-            nakamaConnection.Socket.ReceivedMatchPresence += m => mainThread.Enqueue(() => OnReceivedMatchPresence(m));
-            nakamaConnection.Socket.ReceivedMatchState += m => mainThread.Enqueue(() => OnReceivedMatchState(m));
+            _socket.ReceivedMatchPresence += m => mainThread.Enqueue(() => OnReceivedMatchPresence(m));
+            _socket.ReceivedMatchState += m => mainThread.Enqueue(() => OnReceivedMatchState(m));
         }
 
         private void OnReceivedMatchState(IMatchState matchState)
@@ -63,14 +83,18 @@ namespace _Scripts.Managers
                 print("Found matchmaker");
                 var match = await _socket.JoinMatchAsync(matchmaker);
                 print("joined matchmaker");
-                mainMenu.DeActive();
-                print(match.Self.SessionId);
-                foreach (var user in match.Presences)
+                var sceneLoadHandler = Addressables.LoadSceneAsync(gameScene);
+                sceneLoadHandler.Completed += async e =>
                 {
-                    SpawnPlayer(match.Id, user);
-                }
+                    print("Game Scene loaded");
+                    print(match.Self.SessionId);
+                    foreach (var user in match.Presences)
+                    {
+                        SpawnPlayer(match.Id, user);
+                    }
 
-                _currentMatch = match;
+                    _currentMatch = match;
+                };
             }
             catch (Exception e)
             {
@@ -94,8 +118,8 @@ namespace _Scripts.Managers
                     newUser.GetComponent<PlayerHealthController>().PlayerDeath += PlayerDeath;
                     //...
                 }
-                newUser.GetComponent<Player>().ChangeColor(isLocalUser);
 
+                newUser.GetComponent<Player>().ChangeColor(isLocalUser);
             }
             catch (Exception e)
             {
