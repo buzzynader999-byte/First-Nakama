@@ -49,5 +49,10 @@ namespace _Scripts.UI
         {
             _client.OpenOverlay<Panel_MainMenu>();
         }
+
+        public void OpenGameMenu()
+        {
+            _client.OpenOverlay<Panel_GameMenu>();
+        }
     }
 }

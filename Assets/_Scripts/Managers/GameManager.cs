@@ -19,8 +19,6 @@ namespace _Scripts.Managers
         private IUserPresence _localPlayer;
         private IMatch _currentMatch;
         public static GameManager Instance;
-        [SerializeField] AssetReference gameScene;
-        [SerializeField] AssetReference mainMenuScene;
 
         private void Awake()
         {
@@ -83,18 +81,14 @@ namespace _Scripts.Managers
                 print("Found matchmaker");
                 var match = await _socket.JoinMatchAsync(matchmaker);
                 print("joined matchmaker");
-                var sceneLoadHandler = Addressables.LoadSceneAsync(gameScene);
-                sceneLoadHandler.Completed += async e =>
+                UIManager.Instance.OpenGameMenu();
+                //print(match.Self.SessionId);
+                foreach (var user in match.Presences)
                 {
-                    print("Game Scene loaded");
-                    print(match.Self.SessionId);
-                    foreach (var user in match.Presences)
-                    {
-                        SpawnPlayer(match.Id, user);
-                    }
+                    SpawnPlayer(match.Id, user);
+                }
 
-                    _currentMatch = match;
-                };
+                _currentMatch = match;
             }
             catch (Exception e)
             {
