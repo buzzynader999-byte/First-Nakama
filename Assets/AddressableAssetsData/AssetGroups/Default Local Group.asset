@@ -35,8 +35,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e30b74af4738f964088c7550199256d7
-    m_Address: Bullet
+  - m_GUID: e193ccd356dcbcf498ff8b7621e422b3
+    m_Address: Assets/_Prefabs/Gun Bullet.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e8b92bd6e6e70974c80b5b52129d9bb5
+    m_Address: Assets/_Prefabs/Gun.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

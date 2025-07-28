@@ -11,6 +11,10 @@ namespace _Scripts.PlayerScripts
         [SerializeField] AssetReferenceGameObject targetWeapon;
         [SerializeField] Player player;
         private AssetLoader<AssetReferenceGameObject, GameObject> _weaponLoader;
+        Animator gunAnimator;
+        private bool _canAttack = false;
+
+        private Weapon _gun;
 
         private void Awake()
         {
@@ -20,7 +24,24 @@ namespace _Scripts.PlayerScripts
         async void Start()
         {
             await _weaponLoader.LoadAsync();
-            Instantiate(_weaponLoader.LoadedAsset, player.GunPlace, false);
+            _gun = Instantiate(_weaponLoader.LoadedAsset, player.GunPlace, false).GetComponent<Weapon>();
+            gunAnimator = _gun.GetComponent<Animator>();
+        }
+
+        public void Attack()
+        {
+            gunAnimator.Play("Fire");
+            if (_canAttack)
+            {
+                _gun.Attack();
+                _canAttack = false;
+                Invoke(nameof(ResetGunState), 0.5f);
+            }
+        }
+
+        void ResetGunState()
+        {
+            _canAttack = true;
         }
     }
 }
