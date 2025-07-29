@@ -6,12 +6,16 @@ namespace _Scripts.Entities
 {
     public class PlayerMovementController : MonoBehaviour
     {
+        private static readonly int Horizontal = Animator.StringToHash("Horizontal");
+        private static readonly int Jump1 = Animator.StringToHash("Jump");
+        private static readonly int Fall = Animator.StringToHash("Fall");
+        private static readonly int Land = Animator.StringToHash("Land");
         [SerializeField] Rigidbody2D rigidbody2D;
         [SerializeField] float jumpForce = 200;
         [SerializeField] float movementSpeed;
         [SerializeField] Animator bodyAnimator;
-        private float _horizontal;
 
+        private float _horizontal;
         bool _jumped = false;
         bool _falling = false;
 
@@ -28,7 +32,7 @@ namespace _Scripts.Entities
         public void SetHorizontal(float horizontal)
         {
             _horizontal = horizontal;
-
+            bodyAnimator.SetFloat(Horizontal,Mathf.Abs(horizontal));
             if (_horizontal == 0) return;
             float rotation = 0;
             if (_horizontal >= 0.1f)
@@ -48,7 +52,7 @@ namespace _Scripts.Entities
             if (!_jumped)
             {
                 _jumped = true;
-                bodyAnimator.SetTrigger("Jump");
+                bodyAnimator.SetTrigger(Jump1);
                 rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             }
         }
@@ -57,13 +61,13 @@ namespace _Scripts.Entities
         {
             if (_jumped && rigidbody2D.linearVelocity.normalized.y < 0 && !_falling)
             {
-                bodyAnimator.SetTrigger("Fall");
+                bodyAnimator.SetTrigger(Fall);
                 _falling = true;
             }
 
             if (_falling && rigidbody2D.linearVelocity.normalized.y == 0)
             {
-                bodyAnimator.SetTrigger("Land");
+                bodyAnimator.SetTrigger(Land);
                 _jumped = false;
                 _falling = false;
             }

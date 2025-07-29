@@ -112,8 +112,6 @@ namespace _Scripts.Managers
                     newUser.GetComponent<PlayerHealthController>().PlayerDeath += PlayerDeath;
                     //...
                 }
-
-                newUser.GetComponent<Player>().ChangeColor(isLocalUser);
             }
             catch (Exception e)
             {

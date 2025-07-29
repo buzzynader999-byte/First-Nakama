@@ -12,6 +12,8 @@ namespace _Scripts.PlayerScripts
         [SerializeField] Player player;
         private AssetLoader<AssetReferenceGameObject, GameObject> _weaponLoader;
 
+        private Weapon gun;
+
         private void Awake()
         {
             _weaponLoader = new AssetLoader<AssetReferenceGameObject, GameObject>(targetWeapon);
@@ -20,7 +22,12 @@ namespace _Scripts.PlayerScripts
         async void Start()
         {
             await _weaponLoader.LoadAsync();
-            Instantiate(_weaponLoader.LoadedAsset, player.GunPlace, false);
+            gun = Instantiate(_weaponLoader.LoadedAsset, player.GunPlace, false).GetComponent<Weapon>();
+        }
+
+        public void Attack()
+        {
+            gun.Attack();
         }
     }
 }

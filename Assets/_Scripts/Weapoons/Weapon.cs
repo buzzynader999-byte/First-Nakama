@@ -38,7 +38,7 @@ namespace _Scripts.Weapoons
         public virtual void Attack()
         {
             var newBullet = Instantiate(_bulletLoader.LoadedAsset, firePoint.position, Quaternion.identity);
-            newBullet.GetComponent<Bullet>().Rigidbody2D.linearVelocity = newBullet.transform.right * BulletSpeed;
+            newBullet.GetComponent<Bullet>().Rigidbody2D.linearVelocity = transform.right * BulletSpeed;
         }
     }
 }

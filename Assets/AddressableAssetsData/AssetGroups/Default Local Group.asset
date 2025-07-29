@@ -15,6 +15,16 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: c9ba9f6fc6383784984e3ffa7fa97716
   m_SerializeEntries:
+  - m_GUID: 112effb9f0480024f8325162448b57fb
+    m_Address: Cannonball
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 21c1c95579dd6d44fb44d14183c7cd7e
+    m_Address: Gun
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3c2da2416064cfb4aa976326171c1f82
     m_Address: Hand Gun
     m_ReadOnly: 0
