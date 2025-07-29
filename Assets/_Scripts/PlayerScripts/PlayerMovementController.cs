@@ -51,7 +51,6 @@ namespace _Scripts.Entities
                 bodyAnimator.SetTrigger("Jump");
                 rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             }
-            //StartCoroutine(PerformJun());
         }
 
         private void LateUpdate()
@@ -68,16 +67,6 @@ namespace _Scripts.Entities
                 _jumped = false;
                 _falling = false;
             }
-        }
-
-        IEnumerator PerformJun()
-        {
-            bodyAnimator.SetTrigger("Jump");
-            rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            yield return new WaitForSeconds(2);
-            bodyAnimator.SetTrigger("Fall");
-            bodyAnimator.SetTrigger("Land");
-            rigidbody2D.linearVelocity = new Vector2(rigidbody2D.linearVelocity.x, 0);
         }
     }
 }
