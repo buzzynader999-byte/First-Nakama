@@ -23,12 +23,13 @@ namespace _Scripts.Entities
         {
             if (_players.ContainsKey(targetUser.SessionId))
                 return null;
-            var pos = spawnPoints[Random.Range(0, spawnPoints.Count-1)].position;
+            var pos = spawnPoints[Random.Range(0, spawnPoints.Count - 1)].position;
 
             await CheckForLoadedPlayers();
             var newPlayer = Instantiate(isLocalUser ? _loadedLocalPlayer : _loadedRemotePlayer,
                 pos,
                 Quaternion.identity);
+            if (isLocalUser) CameraController.Instance.SetTarget(newPlayer);
             _players.Add(targetUser.SessionId, newPlayer);
             return newPlayer;
         }

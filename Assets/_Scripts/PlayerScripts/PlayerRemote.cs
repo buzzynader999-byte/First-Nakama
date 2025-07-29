@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace _Scripts.Entities
 {
+    [RequireComponent(typeof(PlayerHealthController))]
     public class PlayerRemote : MonoBehaviour
     {
         GameManager _gameManager => GameManager.Instance;
