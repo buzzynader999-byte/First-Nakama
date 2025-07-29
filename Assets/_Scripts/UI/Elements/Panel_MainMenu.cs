@@ -1,3 +1,4 @@
+using _Scripts.Managers;
 using UnityEngine;
 
 namespace _Scripts.UI.Elements
@@ -6,8 +7,8 @@ namespace _Scripts.UI.Elements
     {
         public void FindMatch()
         {
-            UIManager.Instance.FindMatch();
             UIManager.Instance.Close(this);
+            GameManager.Instance.FindMatch();
         }
 
         public void Exit()

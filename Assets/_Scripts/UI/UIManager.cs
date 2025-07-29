@@ -24,9 +24,9 @@ namespace _Scripts.UI
             }
         }
 
-        public void FindMatch()
+        public void OpenFindMatch()
         {
-            GameManager.Instance.FindMatch();
+            
             _client.OpenOverlay<Popup_MatchMaking>(false, true);
         }
 
@@ -39,21 +39,27 @@ namespace _Scripts.UI
         {
             _client.OpenOverlay<Panel_Settings>();
         }
-
-        public void Close(Overlay target)
-        {
-            _client.CloseOverlay(target);
-        }
-
+        
         public void OpenMainMenu()
         {
+            //_client.CloseAllOverlays();
             _client.OpenOverlay<Panel_MainMenu>();
         }
 
         public void OpenGameMenu()
         {
             _client.CloseOverlay(_client.overlayList[0]);
-            _client.OpenOverlay<Panel_GameMenu>();
+            _client.OpenOverlay<Panel_Game>();
+        }
+
+        public void OpenOptionsInGame()
+        {
+            _client.OpenOverlay<Popup_OptionsInGame>();
+        }
+
+        public void Close(Overlay target)
+        {
+            _client.CloseOverlay(target);
         }
     }
 }

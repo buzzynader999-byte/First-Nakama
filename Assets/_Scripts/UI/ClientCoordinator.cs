@@ -1,22 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
-using UnityEngine.Networking;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.SceneManagement;
-using static Unity.Burst.Intrinsics.X86.Avx;
-
-
-// Note : without any trasntion effect between Panels and use only one Canvas and also use Stack DS for mamanging
-
-// Note : for now instantiated popup is child of panelCanvas
-//  maybe in future move to other canvas...
 
 public class ClientCoordinator : MonoBehaviour
 {
@@ -52,8 +39,6 @@ public class ClientCoordinator : MonoBehaviour
 
     #region Overlay
 
-    //public bool isClosing = false;
-
     public List<Overlay> overlayList = new List<Overlay>();
 
     public T OpenOverlay<T>(bool hasCanvas = false, bool showOnTop = false) where T : Overlay
@@ -70,7 +55,7 @@ public class ClientCoordinator : MonoBehaviour
             currentOverlayGameobject =
                 Addressables.InstantiateAsync(typeof(T).Name, panelCanvas.transform).WaitForCompletion();
         }
-        
+
         Overlay overlay = currentOverlayGameobject.GetComponent<T>();
 
         if (overlayList.Count != 0 && !showOnTop)
@@ -257,6 +242,14 @@ public class ClientCoordinator : MonoBehaviour
     }
 
     #endregion
+
+    public void CloseAllOverlays()
+    {
+        for (int i = 0; i < overlayList.Count-1; i++)
+        {
+            CloseOverlay(overlayList[i]);
+        }
+    }
 }
 
 

@@ -16,7 +16,7 @@ namespace _Scripts
         public static Action OnSocketCreated;
 
         ISession _session;
-
+IMatch _match;
         private string _ticket;
         private string _matchID;
         
@@ -61,11 +61,11 @@ namespace _Scripts
             try
             {
                 print("Found matchmaker");
-                var match = await _socket.JoinMatchAsync(matchmaker);
-                _matchID = match.Id;
+                _match = await _socket.JoinMatchAsync(matchmaker);
+                _matchID = _match.Id;
                 print("joined matchmaker");
-                print(match.Self.SessionId);
-                foreach (var users in match.Presences)
+                print(_match.Self.SessionId);
+                foreach (var users in _match.Presences)
                 {
                     Debug.Log(users.SessionId);
                 }
@@ -75,27 +75,14 @@ namespace _Scripts
                 print(e.Message);
             }
         }
-
-        /*public async void Ping()
+        public void CancelMatchMaking()
         {
-            print("Sending Ping!");
-            await _socket.SendMatchStateAsync(_matchID, 1, "", null);
-        }*/
+            _socket.RemoveMatchmakerAsync(_ticket);
+        }
 
-        /*async void OnReceivedMatchState(IMatchState matchState)
+        public void LeaveMatch()
         {
-            if (matchState.OpCode == 1)
-            {
-                print("Received Pong");
-                print("Sending Ping!");
-                await _socket.SendMatchStateAsync(_matchID, 2, "", new[] { matchState.UserPresence });
-            }
-            else if (matchState.OpCode == 2)
-            {
-                print("Received Ping");
-                print("Sending Pong!");
-                await _socket.SendMatchStateAsync(_matchID, 1, "", new[] { matchState.UserPresence });
-            }
-        }*/
+            _socket.LeaveMatchAsync(_match);
+        }
     }
 }

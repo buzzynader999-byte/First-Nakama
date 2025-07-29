@@ -41,7 +41,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c0d4575f72119de419d63632cc71a4e9
-    m_Address: Assets/_Prefabs/Addressables/Characters/Base Player.prefab
+    m_Address: Base Player
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

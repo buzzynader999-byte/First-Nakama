@@ -128,6 +128,7 @@ namespace _Scripts.Managers
         public void FindMatch()
         {
             nakamaConnection.FindMatch();
+            UIManager.Instance.OpenFindMatch();
         }
 
         public void SendMatchState(long op, string state) => _socket.SendMatchStateAsync(_currentMatch.Id, op, state);
@@ -142,6 +143,18 @@ namespace _Scripts.Managers
             {
                 Debug.Log(e);
             }
+        }
+
+        public void CancelMatchMaking()
+        {
+            nakamaConnection.CancelMatchMaking();
+            UIManager.Instance.OpenMainMenu();
+        }
+
+        public void Leavematch()
+        {
+            nakamaConnection.LeaveMatch();
+            UIManager.Instance.OpenMainMenu();
         }
     }
 }

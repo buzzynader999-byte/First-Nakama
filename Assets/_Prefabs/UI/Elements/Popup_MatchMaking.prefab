@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -20, y: -20}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7496533833065036256
 CanvasRenderer:
@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2924528, g: 0.27727836, b: 0.27727836, a: 1}
+  m_Color: {r: 0.2627451, g: 0.2627451, b: 0.2627451, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -113,10 +113,10 @@ RectTransform:
   - {fileID: 6809315871473956333}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 250, y: 130}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &4077913001226865263
 Canvas:
@@ -234,16 +234,18 @@ MonoBehaviour:
   content: {fileID: 1002881597406935855}
   closeWithBackButton: 0
   animationData:
-    useOpenAnimation: 0
-    openElements: []
+    useOpenAnimation: 1
+    openElements:
+    - {fileID: 6361469266620950192}
     openDurations:
-    - 2
+    - 1
     openEaseTypes: 18000000
-    openDelay: 0.1
-    useCloseAnimation: 0
-    closeElements: []
+    openDelay: 0.5
+    useCloseAnimation: 1
+    closeElements:
+    - {fileID: 6361469266620950192}
     closeDurations:
-    - 0.3
+    - 0.5
     closeEaseTypes: 09000000
     closeDelay: 0.1
 --- !u!1001 &3475851972451368761
@@ -379,6 +381,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6361469266620950192}
     m_Modifications:
+    - target: {fileID: 1684594136307819136, guid: 5ef4f47aabe93e34ea98e4abb389cdf2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1684594136307819136, guid: 5ef4f47aabe93e34ea98e4abb389cdf2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1684594136307819136, guid: 5ef4f47aabe93e34ea98e4abb389cdf2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1599831277495641044}
+    - target: {fileID: 1684594136307819136, guid: 5ef4f47aabe93e34ea98e4abb389cdf2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1684594136307819136, guid: 5ef4f47aabe93e34ea98e4abb389cdf2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CancelMatchMaking
+      objectReference: {fileID: 0}
+    - target: {fileID: 1684594136307819136, guid: 5ef4f47aabe93e34ea98e4abb389cdf2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: _Scripts.UI.Elements.Popup_MatchMaking, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1684594136307819136, guid: 5ef4f47aabe93e34ea98e4abb389cdf2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1990035707228073344, guid: 5ef4f47aabe93e34ea98e4abb389cdf2, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -465,7 +495,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6865832862291862601, guid: 5ef4f47aabe93e34ea98e4abb389cdf2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8446876006643231116, guid: 5ef4f47aabe93e34ea98e4abb389cdf2, type: 3}
       propertyPath: m_text
