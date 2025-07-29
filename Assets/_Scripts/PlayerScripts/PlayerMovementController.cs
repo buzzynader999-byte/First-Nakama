@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace _Scripts.Entities
@@ -6,8 +7,13 @@ namespace _Scripts.Entities
     public class PlayerMovementController : MonoBehaviour
     {
         [SerializeField] Rigidbody2D rigidbody2D;
+        [SerializeField] float jumpForce = 200;
         [SerializeField] float movementSpeed;
+        [SerializeField] Animator bodyAnimator;
         private float _horizontal;
+
+        bool _jumped = false;
+        bool _falling = false;
 
         private void FixedUpdate()
         {
@@ -22,6 +28,56 @@ namespace _Scripts.Entities
         public void SetHorizontal(float horizontal)
         {
             _horizontal = horizontal;
+
+            if (_horizontal == 0) return;
+            float rotation = 0;
+            if (_horizontal >= 0.1f)
+            {
+                rotation = 0;
+            }
+            else if (_horizontal <= -0.1f)
+            {
+                rotation = 180;
+            }
+
+            transform.rotation = Quaternion.Euler(0, rotation, 0);
+        }
+
+        public void Jump()
+        {
+            if (!_jumped)
+            {
+                _jumped = true;
+                bodyAnimator.SetTrigger("Jump");
+                rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            }
+            //StartCoroutine(PerformJun());
+        }
+
+        private void LateUpdate()
+        {
+            if (_jumped && rigidbody2D.velocity.normalized.y < 0 && !_falling)
+            {
+                bodyAnimator.SetTrigger("Fall");
+                _falling = true;
+            }
+
+            if (_falling && rigidbody2D.linearVelocity.normalized.y == 0)
+            {
+                bodyAnimator.SetTrigger("Land");
+                _jumped = false;
+                _falling = false;
+            }
+        }
+
+        IEnumerator PerformJun()
+        {
+            bodyAnimator.SetTrigger("Jump");
+            rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            yield return new WaitForSeconds(2);
+            bodyAnimator.SetTrigger("Fall");
+            bodyAnimator.SetTrigger("Land");
+            rigidbody2D.linearVelocity = new Vector2(rigidbody2D.linearVelocity.x, 0);
         }
     }
 }
