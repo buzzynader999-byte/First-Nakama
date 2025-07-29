@@ -237,8 +237,8 @@ MonoBehaviour:
     useOpenAnimation: 0
     openElements: []
     openDurations:
-    - 0.3
-    openEaseTypes: 09000000
+    - 2
+    openEaseTypes: 18000000
     openDelay: 0.1
     useCloseAnimation: 0
     closeElements: []
