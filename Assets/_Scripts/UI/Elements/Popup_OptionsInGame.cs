@@ -8,5 +8,11 @@
             {
                 GameManager.Instance.Leavematch();
             }
+
+            public void CloseOptions()
+            {
+                UIManager.Instance.Close(this);
+                UIManager.Instance.OpenGameMenu();
+            }
         }
     }

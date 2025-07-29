@@ -4,6 +4,7 @@
     {
         public void OpenOptions()
         {
+            UIManager.Instance.Close(this);
             UIManager.Instance.OpenOptionsInGame();
         }
     }
