@@ -52,6 +52,7 @@ namespace _Scripts.UI
 
         public void OpenGameMenu()
         {
+            _client.CloseOverlay(_client.overlayList[0]);
             _client.OpenOverlay<Panel_GameMenu>();
         }
     }
