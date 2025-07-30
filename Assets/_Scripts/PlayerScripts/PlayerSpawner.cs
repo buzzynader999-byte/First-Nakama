@@ -14,6 +14,7 @@ namespace _Scripts.Entities
         [SerializeField] AssetReferenceGameObject playerRemoteNetworkPrefab;
         public static PlayerSpawner instance;
         Dictionary<string, GameObject> _players = new Dictionary<string, GameObject>();
+        public Dictionary<string, GameObject> Players => _players;
 
         GameObject _loadedLocalPlayer;
         GameObject _loadedRemotePlayer;

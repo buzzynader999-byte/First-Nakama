@@ -15,10 +15,5 @@ namespace _Scripts.UI.Elements
         {
             UIManager.Instance.ExitGame();
         }
-
-        public void OpenSettings()
-        {
-            UIManager.Instance.OpenSettings();
-        }
     }
 }

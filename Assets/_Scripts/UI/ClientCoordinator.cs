@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
@@ -60,7 +61,7 @@ public class ClientCoordinator : MonoBehaviour
 
         if (overlayList.Count != 0 && !showOnTop)
         {
-            if (overlay.content != null)
+            if (overlay.content)
                 overlay.content.SetActive(false);
             else
                 currentOverlayGameobject.SetActive(false);
@@ -245,7 +246,7 @@ public class ClientCoordinator : MonoBehaviour
 
     public void CloseAllOverlays()
     {
-        for (int i = 0; i < overlayList.Count-1; i++)
+        for (int i = 0; i < overlayList.Count - 1; i++)
         {
             CloseOverlay(overlayList[i]);
         }

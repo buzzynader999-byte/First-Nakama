@@ -82,7 +82,7 @@ IMatch _match;
 
         public void LeaveMatch()
         {
-            _socket.LeaveMatchAsync(_match);
+            _socket?.LeaveMatchAsync(_match);
         }
     }
 }

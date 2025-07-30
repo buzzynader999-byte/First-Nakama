@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using _Scripts.Managers;
+using _Scripts.PlayerScripts;
 using Nakama;
 using Nakama.TinyJson;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace _Scripts.Entities
         [SerializeField] float lerpTime = 0.2f;
         [SerializeField] Rigidbody2D rigidbody2D;
         [SerializeField] PlayerMovementController movementController;
+        [SerializeField] PlayerWeaponController weaponController;
         float _lerpTimer = 0;
         private Vector3 _targetPosition;
         private Vector3 _lastPosition;
@@ -65,13 +67,16 @@ namespace _Scripts.Entities
             _targetPosition = Vector3.Lerp(transform.position, position, lerpTime / _lerpTimer);
         }
 
-        private IDictionary<string, string> GetStateAsDictionary(byte[] state) =>
-            Encoding.UTF8.GetString(state).FromJson<Dictionary<string, string>>();
-
         private void SetInputFromState(byte[] state)
         {
             var stateDictionary = GetStateAsDictionary(state);
             movementController.SetHorizontal(float.Parse(stateDictionary["horizontalInput"]));
+            
+            if (bool.Parse(stateDictionary["attack"]))
+                weaponController.Attack();
+
+            if (bool.Parse(stateDictionary["jump"]))
+                movementController.Jump();
         }
 
         void LateUpdate()
@@ -88,6 +93,9 @@ namespace _Scripts.Entities
                 transform.position = Vector3.Lerp(transform.position, _targetPosition, _lerpTimer / lerpTime);
             }
         }
+
+        private IDictionary<string, string> GetStateAsDictionary(byte[] state) =>
+            Encoding.UTF8.GetString(state).FromJson<Dictionary<string, string>>();
 
         private void OnDestroy()
         {

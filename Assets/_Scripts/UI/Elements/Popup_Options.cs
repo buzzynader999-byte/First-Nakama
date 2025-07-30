@@ -1,8 +1,10 @@
-﻿    using _Scripts.Managers;
+﻿    using System;
+    using _Scripts.Managers;
+    using UnityEngine;
 
     namespace _Scripts.UI.Elements
     {
-        public class Popup_OptionsInGame:Popup
+        public class Popup_Options:Popup
         {
             public void LeaveGameNow()
             {

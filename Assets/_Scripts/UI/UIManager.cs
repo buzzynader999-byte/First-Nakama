@@ -26,7 +26,6 @@ namespace _Scripts.UI
 
         public void OpenFindMatch()
         {
-            
             _client.OpenOverlay<Popup_MatchMaking>(false, true);
         }
 
@@ -34,27 +33,22 @@ namespace _Scripts.UI
         {
             _client.OpenOverlay<Popup_Exit>();
         }
-
-        public void OpenSettings()
-        {
-            _client.OpenOverlay<Panel_Settings>();
-        }
         
         public void OpenMainMenu()
         {
-            //_client.CloseAllOverlays();
+            _client.Clear();
             _client.OpenOverlay<Panel_MainMenu>();
         }
 
         public void OpenGameMenu()
         {
-            _client.CloseOverlay(_client.overlayList[0]);
+           _client.Clear();
             _client.OpenOverlay<Panel_Game>();
         }
 
         public void OpenOptionsInGame()
         {
-            _client.OpenOverlay<Popup_OptionsInGame>();
+            _client.OpenOverlay<Popup_Options>();
         }
 
         public void Close(Overlay target)

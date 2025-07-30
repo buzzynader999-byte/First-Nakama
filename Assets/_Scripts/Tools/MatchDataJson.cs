@@ -36,6 +36,8 @@ namespace _Scripts.Tools
             var values = new Dictionary<string, string>
             {
                 { "horizontalInput", inputDetails.HorizontalInput.ToString() },
+                { "attack", inputDetails.Attack.ToString() },
+                { "jump", inputDetails.Jump.ToString() },
             };
 
             return values.ToJson();

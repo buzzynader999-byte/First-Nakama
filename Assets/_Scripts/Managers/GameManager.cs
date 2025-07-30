@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using _Scripts.Entities;
 using _Scripts.Tools;
 using _Scripts.UI;
 using Nakama;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.SceneManagement;
 
 namespace _Scripts.Managers
 {
@@ -16,7 +13,6 @@ namespace _Scripts.Managers
         public NakamaConnection NakamaConnection => nakamaConnection;
         private ISocket _socket => nakamaConnection.Socket;
         private IUserPresence _localUser;
-        private IUserPresence _localPlayer;
         private IMatch _currentMatch;
         public static GameManager Instance;
 
@@ -58,19 +54,42 @@ namespace _Scripts.Managers
             {
                 case 1:
                     break;
-                case 2:
+                case 2: //InputChanged
                     print("Input state received");
                     break;
                 case 3:
                     break;
+                case 4: //Respawned
+                    break;
+                case 5: //Leaved
+                    break;
             }
         }
 
+
+
         private void OnReceivedMatchPresence(IMatchPresenceEvent matchPresenceEvent)
         {
-            foreach (var joinedOne in matchPresenceEvent.Joins) SpawnPlayer(matchPresenceEvent.MatchId, joinedOne);
+            print("Some one leaved or joined");
+            foreach (var joinedOne in matchPresenceEvent.Joins)
+            {
+                print(joinedOne.SessionId + " joined");
+                SpawnPlayer(matchPresenceEvent.MatchId, joinedOne);
+            }
 
-            foreach (var leaved in matchPresenceEvent.Leaves) PlayerSpawner.instance.Destroy(leaved.SessionId);
+            foreach (var leaved in matchPresenceEvent.Leaves)
+            {
+                print(leaved.SessionId + " leaved");
+                PlayerSpawner.instance.Destroy(leaved.SessionId);
+                /*var players = PlayerSpawner.instance.Players;
+                if (players.Count == 1)
+                {
+                    if (players.ContainsKey(_localUser.SessionId))
+                    {
+                        Debug.Log("You Win");
+                    }
+                }*/
+            }
         }
 
         private async void OnReceivedMatchmakerMatched(IMatchmakerMatched matchmaker)
@@ -108,7 +127,6 @@ namespace _Scripts.Managers
                 }
                 else
                 {
-                    _localPlayer = _localUser;
                     newUser.GetComponent<PlayerHealthController>().PlayerDeath += PlayerDeath;
                     //...
                 }
@@ -155,6 +173,11 @@ namespace _Scripts.Managers
         {
             nakamaConnection.LeaveMatch();
             UIManager.Instance.OpenMainMenu();
+        }
+
+        private void OnDestroy()
+        {
+            nakamaConnection.LeaveMatch();
         }
     }
 }
