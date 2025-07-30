@@ -1,6 +1,7 @@
 ﻿using System;
 using _Scripts.Entities;
 using _Scripts.Tools;
+using _Scripts.Tools.Service_Locator;
 using _Scripts.UI;
 using Nakama;
 using UnityEngine;
@@ -20,7 +21,9 @@ namespace _Scripts.Managers
         {
             Instance = this;
             nakamaConnection.Connect();
-            
+            ServiceLocator.Register(new ScoreManager(nakamaConnection));
+            //ServiceLocator.Register(ClientCoordinator.Instance);
+            ServiceLocator.Register(UIManager.Instance);
         }
 
         private void OnEnable()
@@ -35,7 +38,7 @@ namespace _Scripts.Managers
 
         private void Start()
         {
-            UIManager.Instance.OpenMainMenu();
+            ServiceLocator.Get<UIManager>().OpenMainMenu();
         }
 
         void SubscribeToSocket()
@@ -100,7 +103,7 @@ namespace _Scripts.Managers
                 print("Found matchmaker");
                 var match = await _socket.JoinMatchAsync(matchmaker);
                 print("joined matchmaker");
-                UIManager.Instance.OpenGameMenu();
+                ServiceLocator.Get<UIManager>().OpenGameMenu();
                 //print(match.Self.SessionId);
                 foreach (var user in match.Presences)
                 {
@@ -146,7 +149,7 @@ namespace _Scripts.Managers
         public void FindMatch()
         {
             nakamaConnection.FindMatch();
-            UIManager.Instance.OpenFindMatch();
+            ServiceLocator.Get<UIManager>().OpenFindMatch();
         }
 
         public void SendMatchState(long op, string state) => _socket.SendMatchStateAsync(_currentMatch.Id, op, state);
@@ -166,13 +169,13 @@ namespace _Scripts.Managers
         public void CancelMatchMaking()
         {
             nakamaConnection.CancelMatchMaking();
-            UIManager.Instance.OpenMainMenu();
+            ServiceLocator.Get<UIManager>().OpenMainMenu();
         }
 
         public void Leavematch()
         {
             nakamaConnection.LeaveMatch();
-            UIManager.Instance.OpenMainMenu();
+            ServiceLocator.Get<UIManager>().OpenMainMenu();
         }
 
         private void OnDestroy()

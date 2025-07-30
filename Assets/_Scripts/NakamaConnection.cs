@@ -86,5 +86,10 @@ namespace _Scripts
             if (_match != null && _socket != null)
                 _socket.LeaveMatchAsync(_match);
         }
+
+        public void SubmitScore()
+        {
+            Debug.Log("Try SubmitScore");
+        }
     }
 }

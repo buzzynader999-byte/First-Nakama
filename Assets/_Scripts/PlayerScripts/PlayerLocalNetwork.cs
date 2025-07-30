@@ -17,6 +17,8 @@ namespace _Scripts.Entities
         GameManager _gManager => GameManager.Instance;
         Vector2 _position => transform.position;
         Vector2 _velocity => _rigidbody2D.linearVelocity;
+        public static Action onPlayerAttacked;
+
 
         private void LateUpdate()
         {
@@ -32,5 +34,6 @@ namespace _Scripts.Entities
         }
 
         private void SendMessage(long op, string state) => _gManager.SendMatchState(op, state);
+
     }
 }

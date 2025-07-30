@@ -1,12 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using _Scripts.Tools.Service_Locator;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
 
-public class ClientCoordinator : MonoBehaviour
+public class ClientCoordinator : MonoBehaviour,IService
 {
     #region Singleton
 

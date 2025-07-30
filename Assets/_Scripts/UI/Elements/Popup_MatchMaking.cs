@@ -1,4 +1,5 @@
 using _Scripts.Managers;
+using _Scripts.Tools.Service_Locator;
 
 namespace _Scripts.UI.Elements
 {
@@ -6,7 +7,7 @@ namespace _Scripts.UI.Elements
     {
         public void CancelMatchMaking()
         {
-            UIManager.Instance.Close(this);
+            ServiceLocator.Get<UIManager>().Close(this);
             GameManager.Instance.CancelMatchMaking();
         }
         

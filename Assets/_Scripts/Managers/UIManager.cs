@@ -1,12 +1,12 @@
 ﻿using System;
 using _Scripts.Managers;
+using _Scripts.Tools.Service_Locator;
 using _Scripts.UI.Elements;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace _Scripts.UI
 {
-    public class UIManager : MonoBehaviour
+    public class UIManager : MonoBehaviour,IService
     {
         public static UIManager Instance { set; get; }
         ClientCoordinator _client => ClientCoordinator.Instance;

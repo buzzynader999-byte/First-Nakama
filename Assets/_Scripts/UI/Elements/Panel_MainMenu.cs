@@ -1,4 +1,5 @@
 using _Scripts.Managers;
+using _Scripts.Tools.Service_Locator;
 using UnityEngine;
 
 namespace _Scripts.UI.Elements
@@ -7,13 +8,13 @@ namespace _Scripts.UI.Elements
     {
         public void FindMatch()
         {
-            UIManager.Instance.Close(this);
+            ServiceLocator.Get<UIManager>().Close(this);
             GameManager.Instance.FindMatch();
         }
 
         public void Exit()
         {
-            UIManager.Instance.ExitGame();
+            ServiceLocator.Get<UIManager>().ExitGame();
         }
     }
 }

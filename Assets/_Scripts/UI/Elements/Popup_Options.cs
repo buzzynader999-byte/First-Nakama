@@ -1,5 +1,6 @@
 ﻿    using System;
     using _Scripts.Managers;
+    using _Scripts.Tools.Service_Locator;
     using UnityEngine;
 
     namespace _Scripts.UI.Elements
@@ -13,8 +14,8 @@
 
             public void CloseOptions()
             {
-                UIManager.Instance.Close(this);
-                UIManager.Instance.OpenGameMenu();
+                ServiceLocator.Get<UIManager>().Close(this);
+                ServiceLocator.Get<UIManager>().OpenGameMenu();
             }
         }
     }

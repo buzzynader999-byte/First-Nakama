@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -10,7 +12,6 @@ namespace _Scripts.Weapoons
         [SerializeField] float bulletSpeed;
         [SerializeField] private Transform firePoint;
         [SerializeField] AssetReferenceGameObject bulletPrefab;
-
 
         private AssetLoader<AssetReferenceGameObject, GameObject> _bulletLoader;
         public Transform FirePoint => firePoint;
