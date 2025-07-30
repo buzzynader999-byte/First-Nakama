@@ -12,14 +12,14 @@ namespace _Scripts
         private readonly string _key = "defaultkey";
         IClient _client;
         ISocket _socket;
-        public ISocket Socket=> _socket;
+        public ISocket Socket => _socket;
         public static Action OnSocketCreated;
 
         ISession _session;
-IMatch _match;
+        IMatch _match;
         private string _ticket;
         private string _matchID;
-        
+
         public async void Connect()
         {
             try
@@ -75,6 +75,7 @@ IMatch _match;
                 print(e.Message);
             }
         }
+
         public void CancelMatchMaking()
         {
             _socket.RemoveMatchmakerAsync(_ticket);
@@ -82,7 +83,8 @@ IMatch _match;
 
         public void LeaveMatch()
         {
-            _socket?.LeaveMatchAsync(_match);
+            if (_match != null && _socket != null)
+                _socket.LeaveMatchAsync(_match);
         }
     }
 }
