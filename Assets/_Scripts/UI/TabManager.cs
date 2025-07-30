@@ -11,7 +11,8 @@ namespace _Scripts.UI
         //[SerializeField] AssetReferenceGameObject tabButtonPrefab;
 
         [SerializeField] List<TabContainer> _tabContainers = new();
-        [SerializeField] bool openFirstByDefault;
+        [Tooltip("Set it to negative if you do not want to open by default")]
+        [SerializeField] int defaultIndex = -1;
         
         List<GameObject> _tabs = new();
         List<GameObject> _tabsButtons = new();
@@ -38,9 +39,9 @@ namespace _Scripts.UI
                 _tabs.Add(_tabContainers[i].Tab);
             }
 
-            if (openFirstByDefault)
+            if (defaultIndex>=0)
             {
-                OpenTab(0);
+                OpenTab(Mathf.Clamp(defaultIndex,0,_tabContainers.Count-1));
             }
         }
 
