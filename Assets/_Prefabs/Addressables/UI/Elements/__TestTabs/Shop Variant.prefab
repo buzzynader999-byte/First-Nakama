@@ -188,7 +188,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9146471701571205326, guid: eea4483187872484eb509a0a21db710c, type: 3}
       propertyPath: m_Name
-      value: History Variant
+      value: Shop Variant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

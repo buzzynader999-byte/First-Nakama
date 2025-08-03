@@ -21,9 +21,6 @@ namespace _Scripts.Managers
         {
             Instance = this;
             nakamaConnection.Connect();
-            ServiceLocator.Register(new ScoreManager(nakamaConnection));
-            //ServiceLocator.Register(ClientCoordinator.Instance);
-            ServiceLocator.Register(UIManager.Instance);
         }
 
         private void OnEnable()
@@ -38,7 +35,7 @@ namespace _Scripts.Managers
 
         private void Start()
         {
-            ServiceLocator.Get<UIManager>().OpenMainMenu();
+            ServiceLocator.Instance.Get<UIManager>().OpenMainMenu();
         }
 
         void SubscribeToSocket()
@@ -68,7 +65,6 @@ namespace _Scripts.Managers
                     break;
             }
         }
-
 
 
         private void OnReceivedMatchPresence(IMatchPresenceEvent matchPresenceEvent)
@@ -103,7 +99,7 @@ namespace _Scripts.Managers
                 print("Found matchmaker");
                 var match = await _socket.JoinMatchAsync(matchmaker);
                 print("joined matchmaker");
-                ServiceLocator.Get<UIManager>().OpenGameMenu();
+                ServiceLocator.Instance.Get<UIManager>().OpenGameMenu();
                 //print(match.Self.SessionId);
                 foreach (var user in match.Presences)
                 {
@@ -149,33 +145,21 @@ namespace _Scripts.Managers
         public void FindMatch()
         {
             nakamaConnection.FindMatch();
-            ServiceLocator.Get<UIManager>().OpenFindMatch();
+            ServiceLocator.Instance.Get<UIManager>().OpenFindMatch();
         }
 
         public void SendMatchState(long op, string state) => _socket.SendMatchStateAsync(_currentMatch.Id, op, state);
 
-        public async void SendTestMatchState()
-        {
-            try
-            {
-                await _socket.SendMatchStateAsync(_currentMatch.Id, OpCodes.Died, "");
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e);
-            }
-        }
-
         public void CancelMatchMaking()
         {
             nakamaConnection.CancelMatchMaking();
-            ServiceLocator.Get<UIManager>().OpenMainMenu();
+            ServiceLocator.Instance.Get<UIManager>().OpenMainMenu();
         }
 
         public void Leavematch()
         {
             nakamaConnection.LeaveMatch();
-            ServiceLocator.Get<UIManager>().OpenMainMenu();
+            ServiceLocator.Instance.Get<UIManager>().OpenMainMenu();
         }
 
         private void OnDestroy()

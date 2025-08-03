@@ -14,8 +14,8 @@
 
             public void CloseOptions()
             {
-                ServiceLocator.Get<UIManager>().Close(this);
-                ServiceLocator.Get<UIManager>().OpenGameMenu();
+                ServiceLocator.Instance.Get<UIManager>().Close(this);
+                ServiceLocator.Instance.Get<UIManager>().OpenGameMenu();
             }
         }
     }

@@ -30,6 +30,7 @@ namespace _Scripts.Entities
             }
 
             if (!playerInputController.IsInputChanged) return;
+            if (playerInputController.IsAttacked) onPlayerAttacked?.Invoke();
             SendMessage(OpCodes.Input, MatchDataJson.Input(playerInputController.InputDetails));
         }
 

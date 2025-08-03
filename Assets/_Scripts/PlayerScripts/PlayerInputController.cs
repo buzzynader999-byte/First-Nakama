@@ -8,7 +8,9 @@ namespace _Scripts.Entities
     public class PlayerInputController : MonoBehaviour
     {
         private bool _isInputChanged;
+        private bool _isAttacked;
         public bool IsInputChanged => _isInputChanged;
+        public bool IsAttacked => _isAttacked;
         [SerializeField] PlayerMovementController playerMovementController;
         [SerializeField] PlayerWeaponController weaponController;
         public PlayerInputControllerDetails InputDetails { set; get; } = new PlayerInputControllerDetails();
@@ -46,6 +48,7 @@ namespace _Scripts.Entities
             InputDetails.HorizontalInput = _lastInputDetails.HorizontalInput;
             InputDetails.Jump = _lastInputDetails.Jump;
             InputDetails.Attack = _lastInputDetails.Attack;
+            _isAttacked = InputDetails.Attack;
         }
 
         void PerfoemInputChanged()

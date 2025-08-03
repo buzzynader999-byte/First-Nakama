@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _Scripts.UI
 {
-    public class UIManager : MonoBehaviour,IService
+    public class UIManager : Service
     {
         public static UIManager Instance { set; get; }
         ClientCoordinator _client => ClientCoordinator.Instance;
@@ -31,7 +31,9 @@ namespace _Scripts.UI
 
         public void ExitGame()
         {
-            _client.OpenOverlay<Popup_Exit>();
+            ScoreManager sM =ServiceLocator.Instance.Get<ScoreManager>(); 
+            sM.SubmitScores();
+            print("Added to scores in server | current score : " + sM.CurrentScore + " | Score in Server: " + sM.ScoreInServer);
         }
         
         public void OpenMainMenu()

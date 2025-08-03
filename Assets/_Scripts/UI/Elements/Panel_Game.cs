@@ -7,8 +7,8 @@ namespace _Scripts.UI.Elements
     {
         public void OpenOptions()
         {
-            ServiceLocator.Get<UIManager>().Close(this);
-            ServiceLocator.Get<UIManager>().OpenOptionsInGame();
+            ServiceLocator.Instance.Get<UIManager>().Close(this);
+            ServiceLocator.Instance.Get<UIManager>().OpenOptionsInGame();
         }
     }
 }

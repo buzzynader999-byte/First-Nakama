@@ -7,7 +7,7 @@ namespace _Scripts.UI.Elements
     {
         public void CancelMatchMaking()
         {
-            ServiceLocator.Get<UIManager>().Close(this);
+            ServiceLocator.Instance.Get<UIManager>().Close(this);
             GameManager.Instance.CancelMatchMaking();
         }
         

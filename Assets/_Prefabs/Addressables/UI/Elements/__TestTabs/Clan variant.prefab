@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3285772407213848568, guid: 807fbc36f10844547ae27a71caee3624, type: 3}
       propertyPath: m_text
-      value: //Profile
+      value: //Clan
       objectReference: {fileID: 0}
     - target: {fileID: 3285772407213848568, guid: 807fbc36f10844547ae27a71caee3624, type: 3}
       propertyPath: m_fontSize
@@ -188,7 +188,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9146471701571205326, guid: eea4483187872484eb509a0a21db710c, type: 3}
       propertyPath: m_Name
-      value: Profile Variant
+      value: Clan variant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

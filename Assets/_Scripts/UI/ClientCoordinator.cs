@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
 
-public class ClientCoordinator : MonoBehaviour,IService
+public class ClientCoordinator : Service
 {
     #region Singleton
 

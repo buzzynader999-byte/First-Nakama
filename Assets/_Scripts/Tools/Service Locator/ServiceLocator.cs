@@ -1,22 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace _Scripts.Tools.Service_Locator
 {
-    public static class ServiceLocator
+    public class ServiceLocator : MonoBehaviour
     {
-        private static readonly Dictionary<Type, object> Services = new();
-
-        public static void Register<T>(T target) where T : IService => Services.Add(target.GetType(), target);
-
-        public static void Unregister<T>() where T : IService => Services.Remove(typeof(T));
-
-        public static T Get<T>() where T : IService
+        [SerializeField]List<Service> targetServices;
+        private readonly Dictionary<Type, object> services = new();
+        public static ServiceLocator Instance;
+        private void Awake()
         {
-            Services.TryGetValue(typeof(T), out var target);
+            Instance = this;
+            foreach (var target in targetServices)
+            {
+                services.Add(target.GetType(), target);
+            }
+        }
+
+        public void Register<T>(T target) where T : Service => services.Add(target.GetType(), target);
+
+        public void Unregister<T>() where T : Service => services.Remove(typeof(T));
+
+        public T Get<T>() where T : Service
+        {
+            services.TryGetValue(typeof(T), out var target);
             return (T)target;
         }
 
-        public static void ClearAllServices() => Services.Clear();
+        public void ClearAllServices() => services.Clear();
     }
 }

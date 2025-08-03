@@ -8,13 +8,13 @@ namespace _Scripts.UI.Elements
     {
         public void FindMatch()
         {
-            ServiceLocator.Get<UIManager>().Close(this);
+            ServiceLocator.Instance.Get<UIManager>().Close(this);
             GameManager.Instance.FindMatch();
         }
 
         public void Exit()
         {
-            ServiceLocator.Get<UIManager>().ExitGame();
+            ServiceLocator.Instance.Get<UIManager>().ExitGame();
         }
     }
 }
