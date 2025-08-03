@@ -26,6 +26,11 @@ namespace _Scripts
 
         public async Task Connect()
         {
+            //var c2 = new Client(_scheme, _host, _port, _key, UnityWebRequestAdapter.Instance);
+            //var c3 = new Client(_scheme, _host, _port, _key, UnityWebRequestAdapter.Instance);
+            //var s2 = await c2.AuthenticateDeviceAsync("c222222222222222222222222222");
+            //var s3 = await c3.AuthenticateDeviceAsync("c3333333333333333333");
+            
             _client = new Client(_scheme, _host, _port, _key, UnityWebRequestAdapter.Instance);
             _session = await _client.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier);
             _socket = _client.NewSocket();
@@ -96,6 +101,13 @@ namespace _Scripts
                 if (!String.IsNullOrEmpty(records[0]?.Score))
                     return int.Parse(records[0].Score);
             return 0;
+        }
+
+        public async Task<List<IApiLeaderboardRecord>> GetLeaderboardRecords()
+        {
+            var leaderBoardScore = await _client.ListLeaderboardRecordsAsync(_session, "attack", null, null,100);
+            var records = new List<IApiLeaderboardRecord>(leaderBoardScore.Records.ToList());
+            return records;
         }
     }
 }

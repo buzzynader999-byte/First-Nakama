@@ -67,5 +67,14 @@ namespace _Scripts
                 _ = SubmitScores();
             }
         }
+
+        public async Task GetRecords()
+        {
+            var records = await connection.GetLeaderboardRecords();
+            foreach (var record in records)
+            {
+                print("l record: " + record.Score);
+            }
+        }
     }
 }
