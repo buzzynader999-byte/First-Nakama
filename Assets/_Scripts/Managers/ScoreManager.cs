@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Diagnostics.Tracing;
+using System.Threading.Tasks;
 using _Scripts.Entities;
 using _Scripts.Managers;
 using _Scripts.Tools.Service_Locator;
@@ -37,17 +39,32 @@ namespace _Scripts
             onScoreChanged?.Invoke(CurrentScore);
         }
 
-        public void SubmitScores()
+        public async Task SubmitScores()
         {
-            connection.SubmitScore(CurrentScore);
-            ScoreInServer = connection.GetScoreOfThisUser().Result;
-            onServerScoreChanged?.Invoke(ScoreInServer);
+            print("Trying to submit scores");
+            try
+            {
+                /* if (connection.Socket?.IsConnected == false)
+                 {
+                     Debug.LogWarning("Socket not connected, attempting to reconnect...");
+                     await connection.Connect();
+                 }
+ */
+                await connection.SubmitScore(CurrentScore);
+                ScoreInServer = await connection.GetScoreOfThisUser();
+                onServerScoreChanged?.Invoke(ScoreInServer);
+            }
+            catch (Exception e)
+            {
+                Debug.LogAssertion(e);
+            }
         }
+
         private void Update()
         {
             if (Keyboard.current.nKey.wasPressedThisFrame)
             {
-                SubmitScores();
+                _ = SubmitScores();
             }
         }
     }

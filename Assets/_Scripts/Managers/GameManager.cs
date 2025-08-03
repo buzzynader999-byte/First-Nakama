@@ -17,10 +17,17 @@ namespace _Scripts.Managers
         private IMatch _currentMatch;
         public static GameManager Instance;
 
-        private void Awake()
+        private async void Awake()
         {
-            Instance = this;
-            nakamaConnection.Connect();
+            try
+            {
+                Instance = this;
+                await nakamaConnection.Connect();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         private void OnEnable()
