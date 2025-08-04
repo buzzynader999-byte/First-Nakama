@@ -107,6 +107,8 @@ namespace _Scripts
             {
                 newRecord = new GameObject("Empty Player");
                 newRecord.gameObject.AddComponent<RectTransform>();
+                newRecord.transform.SetParent(recordsHolder);
+                newRecord.transform.localScale = Vector3.one;
                 _playerEmptyPlaceInRecords = newRecord.GetComponent<RectTransform>();
                 playerRecord = record;
                 _playerRecordHolder = CreatePlayerRecord(prefab, playerRecord, specialRanks[0]);
@@ -124,6 +126,7 @@ namespace _Scripts
         {
             var playerReord = Instantiate(prefab, recordsViewArea);
             var target = playerReord.GetComponent<LeaderBoardRecord>();
+            target.transform.localScale = Vector3.one;
             target.SetUp(record.Score, record.Username, record.Rank, rankSprite);
             return target.gameObject;
         }
