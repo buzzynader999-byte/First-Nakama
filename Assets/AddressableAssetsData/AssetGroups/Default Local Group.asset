@@ -35,11 +35,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5592315ec5867fc4e9730da21c172c3a
-    m_Address: Leaderboard Record
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 789de5cdb4420d34d8e304f7080a65da
     m_Address: Player Remore Variant
     m_ReadOnly: 0

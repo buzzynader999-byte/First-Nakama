@@ -18,5 +18,11 @@ namespace _Scripts
             userRankImage.sprite = rankSprite;
             rankText.text = rank;
         }
+
+        public void SetName(string username)
+        {
+            usernameText.text = username;
+
+        }
     }
 }

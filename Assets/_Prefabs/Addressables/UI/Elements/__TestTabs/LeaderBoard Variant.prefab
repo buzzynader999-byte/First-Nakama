@@ -32,6 +32,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6482176190944848587}
+  - {fileID: 1692524243587041960}
   m_Father: {fileID: 1265026277752126194}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -380,6 +381,41 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &8905634493565261382
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1692524243587041960}
+  m_Layer: 0
+  m_Name: Out Of Ranks
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1692524243587041960
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8905634493565261382}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8433770321199960937}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -8.5, y: 0}
+  m_SizeDelta: {x: -17, y: 150}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!1001 &1966290276647107487
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1101,10 +1137,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6682049877693345466, guid: 5592315ec5867fc4e9730da21c172c3a, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 147.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 6682049877693345466, guid: 5592315ec5867fc4e9730da21c172c3a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1508,6 +1540,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f42a8933f3648529364ace0fde6de8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  whoAmI: 0
   leaderboardRecordPrefab:
     m_AssetGUID: 5592315ec5867fc4e9730da21c172c3a
     m_SubObjectName: 
@@ -1520,6 +1553,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 5020ba3d400d2744c979f5ab46210700, type: 3}
   regularRank: {fileID: 21300000, guid: 03a8ef7c777c5794a9a5c6499edbe76f, type: 3}
   recordsHolder: {fileID: 1249285453001424038}
+  playerOutOfRankPlace: {fileID: 1692524243587041960}
+  recordsViewArea: {fileID: 6482176190944848587}
 --- !u!224 &5376037372947190235 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3959607387874051772, guid: eea4483187872484eb509a0a21db710c, type: 3}

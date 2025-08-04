@@ -18,7 +18,7 @@ namespace _Scripts
         ISocket _socket;
         public ISocket Socket => _socket;
         public static Action OnSocketCreated;
-
+        public string UserName => _session.Username;
         ISession _session;
         IMatch _match;
         private string _ticket;
@@ -26,13 +26,6 @@ namespace _Scripts
 
         public async Task Connect()
         {
-            //var c2 = new Client(_scheme, _host, _port, _key, UnityWebRequestAdapter.Instance);
-            //var c3 = new Client(_scheme, _host, _port, _key, UnityWebRequestAdapter.Instance);
-            //var c4 = new Client(_scheme, _host, _port, _key, UnityWebRequestAdapter.Instance);
-            //var s2 = await c2.AuthenticateDeviceAsync("c222222222222222222222222222");
-            //var s3 = await c3.AuthenticateDeviceAsync("c33333333333333333333333");
-            //var s4 = await c4.AuthenticateDeviceAsync("c44444444444433333334444");
-            
             _client = new Client(_scheme, _host, _port, _key, UnityWebRequestAdapter.Instance);
             _session = await _client.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier);
             _socket = _client.NewSocket();
