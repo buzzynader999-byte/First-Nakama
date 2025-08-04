@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Threading.Tasks;
 using _Scripts.Entities;
 using _Scripts.Managers;
 using _Scripts.Tools.Service_Locator;
 using _Scripts.Weapoons;
+using Nakama;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -68,13 +70,10 @@ namespace _Scripts
             }
         }
 
-        public async Task GetRecords()
+        public async Task<List<IApiLeaderboardRecord>> GetRecords()
         {
             var records = await connection.GetLeaderboardRecords();
-            foreach (var record in records)
-            {
-                print("l record: " + record.Score);
-            }
+            return records;
         }
     }
 }
