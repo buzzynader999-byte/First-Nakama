@@ -28,7 +28,6 @@ namespace _Scripts
         [SerializeField] Sprite[] specialRanks;
         [SerializeField] Sprite regularRank;
         [SerializeField] private RectTransform recordsHolder;
-        [SerializeField] private RectTransform playerOutOfRankPlace;
         [SerializeField] private RectTransform recordsViewArea;
         private bool _recordsCreated;
         private string myUsername;
@@ -125,6 +124,7 @@ namespace _Scripts
         GameObject CreatePlayerRecord(GameObject prefab, IApiLeaderboardRecord record, Sprite rankSprite)
         {
             var playerReord = Instantiate(prefab, recordsViewArea);
+            playerReord.gameObject.name = "Playr : " + record.Username;
             var target = playerReord.GetComponent<LeaderBoardRecord>();
             target.transform.localScale = Vector3.one;
             target.SetUp(record.Score, record.Username, record.Rank, rankSprite);
