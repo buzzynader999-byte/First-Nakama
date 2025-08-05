@@ -29,6 +29,10 @@ namespace _Scripts.UI
             _client.OpenOverlay<Popup_MatchMaking>(false, true);
         }
 
+        public void OpenLeaderBoard()
+        {
+            _client.OpenOverlay<Panel_LeaderBoard>(false, true);
+        }
         public void ExitGame()
         {
             ScoreManager sM =ServiceLocator.Instance.Get<ScoreManager>(); 

@@ -12,6 +12,10 @@ namespace _Scripts.UI.Elements
             GameManager.Instance.FindMatch();
         }
 
+        public void OpenLeaderBoard()
+        {
+            ServiceLocator.Instance.Get<UIManager>().OpenLeaderBoard();
+        }
         public void Exit()
         {
             ServiceLocator.Instance.Get<UIManager>().ExitGame();

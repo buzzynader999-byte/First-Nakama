@@ -27,18 +27,30 @@ namespace _Scripts
         [SerializeField] private AssetReferenceGameObject leaderboardRecordPrefab;
         [SerializeField] Sprite[] specialRanks;
         [SerializeField] Sprite regularRank;
+        [SerializeField] private LeaderBoardRecord record1;
+        [SerializeField] private LeaderBoardRecord record2;
+        [SerializeField] private LeaderBoardRecord record3;
         [SerializeField] private RectTransform recordsHolder;
         [SerializeField] private RectTransform recordsViewArea;
         [SerializeField] private RectTransform playerRecordUpPlace;
         [SerializeField] private RectTransform playerRecordDownPlace;
-        private bool _recordsCreated;
         private string myUsername;
         private RectTransform _playerRecordHolder;
         private RectTransform _playerEmptyPlaceInRecords;
         private IApiLeaderboardRecord _playerRecord;
+        private bool _recordsCreated = false;
 
         private async void OnEnable()
         {
+            if (transform.childCount > 0)
+            {
+                foreach (Transform child in recordsHolder)
+                {
+                    print("Destroying " + child.name);
+                    Destroy(child.gameObject);
+                }
+            }
+
             if (!_recordsCreated)
             {
                 if (!leaderboardRecordAsyncOperation.IsValid())
@@ -62,10 +74,9 @@ namespace _Scripts
                     print("Destroying " + child.name);
                     Destroy(child.gameObject);
                 }
-
-                _recordsCreated = false;
             }
 
+            _recordsCreated = false;
             if (_playerRecordHolder)
             {
                 Destroy(_playerRecordHolder.gameObject);
@@ -99,11 +110,14 @@ namespace _Scripts
                 myUsername = GetUsername(records);
             }
 
-            // چند نفر اول
-            for (int i = 0; i < Mathf.Min(specialRanks.Length, records.Count); i++)
-                CreateNewRecord(obj.Result, records[i], specialRanks[i]);
+            /*for (int i = 0; i < Mathf.Min(specialRanks.Length, records.Count); i++)
+                CreateNewRecord(obj.Result, records[i], specialRanks[i]);*/
+            SetUpTopThree(record1, 0);
+            SetUpTopThree(record2, 1);
+            SetUpTopThree(record3, 2);
+
             //بقیه رکوردها
-            if (records.Count > specialRanks.Length)
+            if (records.Count > 3)
             {
                 for (int i = specialRanks.Length; i < records.Count; i++)
                     CreateNewRecord(obj.Result, records[i], regularRank);
@@ -127,7 +141,18 @@ namespace _Scripts
                             : regularRank, "100");
                 }
             }
+
+            void SetUpTopThree(LeaderBoardRecord record, int index)
+            {
+                var targetRecord = records[index];
+                record.SetUp(targetRecord.Score, targetRecord.Username, targetRecord.Rank, specialRanks[index]);
+                if (targetRecord.Username == myUsername)
+                {
+                    record.SetColor(Color.limeGreen);
+                }
+            }
         }
+
 
         RectTransform MockPlayerRecord(GameObject prefab, string userName, string score, Sprite sprite, string rank)
         {
