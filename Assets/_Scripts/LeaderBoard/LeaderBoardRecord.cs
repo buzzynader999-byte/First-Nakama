@@ -10,6 +10,7 @@ namespace _Scripts
         [SerializeField] private TextMeshProUGUI usernameText;
         [SerializeField] private TextMeshProUGUI rankText;
         [SerializeField] private Image userRankImage;
+        [SerializeField] Image bgColor;
 
         public void SetUp(string score, string username,string rank, Sprite rankSprite)
         {
@@ -19,9 +20,9 @@ namespace _Scripts
             rankText.text = rank;
         }
 
-        public void SetName(string username)
+        public void SetColor(Color color)
         {
-            usernameText.text = username;
+            bgColor.color = color;
 
         }
     }

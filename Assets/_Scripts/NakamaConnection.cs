@@ -15,11 +15,14 @@ namespace _Scripts
         [SerializeField] int _port = 7350;
         private readonly string _key = "defaultkey";
         IClient _client;
+        public IClient Client => _client;
         ISocket _socket;
         public ISocket Socket => _socket;
         public static Action OnSocketCreated;
         public string UserName => _session.Username;
+        public string UserId => _session.UserId;
         ISession _session;
+        public ISession Session => _session;
         IMatch _match;
         private string _ticket;
         private string _matchID;
@@ -48,6 +51,7 @@ namespace _Scripts
                 await _socket.ConnectAsync(_session, true);
                 Debug.Log("Reconnected: " + _socket.IsConnected);
             }
+
             var matchmakingTicker = await _socket.AddMatchmakerAsync("*", 2, 2, null, null);
             _ticket = matchmakingTicker.Ticket;
         }
@@ -98,9 +102,9 @@ namespace _Scripts
             return 0;
         }
 
-        public async Task<List<IApiLeaderboardRecord>> GetLeaderboardRecords()
+        public async Task<List<IApiLeaderboardRecord>> GetLeaderboardRecords(string leaderBoardId,int limit)
         {
-            var leaderBoardScore = await _client.ListLeaderboardRecordsAsync(_session, "attack", null, null,100);
+            var leaderBoardScore = await _client.ListLeaderboardRecordsAsync(_session, leaderBoardId, null, null, limit);
             var records = new List<IApiLeaderboardRecord>(leaderBoardScore.Records.ToList());
             return records;
         }

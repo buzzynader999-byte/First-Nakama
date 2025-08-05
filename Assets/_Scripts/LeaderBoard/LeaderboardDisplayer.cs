@@ -29,15 +29,16 @@ namespace _Scripts
         [SerializeField] Sprite regularRank;
         [SerializeField] private RectTransform recordsHolder;
         [SerializeField] private RectTransform recordsViewArea;
+        [SerializeField] private RectTransform playerRecordUpPlace;
+        [SerializeField] private RectTransform playerRecordDownPlace;
         private bool _recordsCreated;
         private string myUsername;
-        private GameObject _playerRecordHolder;
+        private RectTransform _playerRecordHolder;
         private RectTransform _playerEmptyPlaceInRecords;
-        private IApiLeaderboardRecord playerRecord;
+        private IApiLeaderboardRecord _playerRecord;
 
         private async void OnEnable()
         {
-            //Addressables.Release(leaderboardRecordAsyncOperation);
             if (!_recordsCreated)
             {
                 if (!leaderboardRecordAsyncOperation.IsValid())
@@ -64,6 +65,11 @@ namespace _Scripts
 
                 _recordsCreated = false;
             }
+
+            if (_playerRecordHolder)
+            {
+                Destroy(_playerRecordHolder.gameObject);
+            }
         }
 
         private void OnDestroy()
@@ -80,23 +86,62 @@ namespace _Scripts
                 return;
             }
 
-            var records = await ServiceLocator.Instance.Get<ScoreManager>().GetRecords();
+            var records = await ServiceLocator.Instance.Get<ScoreManager>().GetRecords("attack", 100);
             if (records == null || records.Count == 0) return;
+            var playerRecord = await ServiceLocator.Instance.Get<ScoreManager>().GetPlayerRank("attack");
+            if (whoAmI == WhoAmI.Original)
+            {
+                _playerRecord = playerRecord;
+                myUsername = GameManager.Instance.NakamaConnection.UserName;
+            }
+            else
+            {
+                myUsername = GetUsername(records);
+            }
 
-            myUsername = whoAmI != WhoAmI.Original
-                ? GetUsername(records)
-                : GameManager.Instance.NakamaConnection.UserName;
-            int specialCount = Mathf.Min(specialRanks.Length, records.Count);
-            for (int i = 0; i < specialCount; i++)
+            // چند نفر اول
+            for (int i = 0; i < Mathf.Min(specialRanks.Length, records.Count); i++)
                 CreateNewRecord(obj.Result, records[i], specialRanks[i]);
-
+            //بقیه رکوردها
             if (records.Count > specialRanks.Length)
             {
                 for (int i = specialRanks.Length; i < records.Count; i++)
                     CreateNewRecord(obj.Result, records[i], regularRank);
             }
 
-            //recordsViewArea.offsetMin = new Vector2(10, 150);
+            if (!_playerEmptyPlaceInRecords)
+            {
+                _playerEmptyPlaceInRecords = CreateEmptyRecord(obj.Result);
+                if (whoAmI == WhoAmI.Original)
+                {
+                    _playerRecordHolder = CreatePlayerRecord(obj.Result,
+                        int.Parse(this._playerRecord.Rank) <= 3
+                            ? specialRanks[int.Parse(this._playerRecord.Rank)]
+                            : regularRank);
+                }
+                else if (whoAmI == WhoAmI.OutOfRanks)
+                {
+                    _playerRecordHolder = MockPlayerRecord(obj.Result, "fakePlayer", "1",
+                        100 <= 3
+                            ? specialRanks[100]
+                            : regularRank, "100");
+                }
+            }
+        }
+
+        RectTransform MockPlayerRecord(GameObject prefab, string userName, string score, Sprite sprite, string rank)
+        {
+            var playerRecord = Instantiate(prefab, recordsViewArea);
+            playerRecord.gameObject.name = "Player : " + userName;
+            var target = playerRecord.GetComponent<LeaderBoardRecord>();
+            target.transform.localScale = Vector3.one;
+            target.SetUp(score, "You", rank, sprite);
+            target.SetColor(Color.limeGreen);
+            var rect = target.GetComponent<RectTransform>();
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.right;
+            rect.sizeDelta = Vector2.up * 130;
+            return rect;
         }
 
         void CreateNewRecord(GameObject prefab, IApiLeaderboardRecord record, Sprite rankSprite)
@@ -104,61 +149,66 @@ namespace _Scripts
             GameObject newRecord;
             if (record.Username == myUsername)
             {
-                newRecord = new GameObject("Empty Player");
-                newRecord.gameObject.AddComponent<RectTransform>();
-                newRecord.transform.SetParent(recordsHolder);
-                newRecord.transform.localScale = Vector3.one;
-                _playerEmptyPlaceInRecords = newRecord.GetComponent<RectTransform>();
-                playerRecord = record;
-                _playerRecordHolder = CreatePlayerRecord(prefab, playerRecord, specialRanks[0]);
+                _playerEmptyPlaceInRecords = CreateEmptyRecord(prefab);
+                if (whoAmI != WhoAmI.Original)
+                    _playerRecord = record;
+                _playerRecordHolder = CreatePlayerRecord(prefab, specialRanks[0]);
             }
             else
             {
                 newRecord = Instantiate(prefab, recordsHolder);
                 var target = newRecord.GetComponent<LeaderBoardRecord>();
                 target.SetUp(record.Score, record.Username, record.Rank, rankSprite);
-                // target.transform.localScale = Vector3.one;
             }
         }
 
-        GameObject CreatePlayerRecord(GameObject prefab, IApiLeaderboardRecord record, Sprite rankSprite)
+        RectTransform CreateEmptyRecord(GameObject basePrefab)
         {
-            var playerReord = Instantiate(prefab, recordsViewArea);
-            playerReord.gameObject.name = "Playr : " + record.Username;
-            var target = playerReord.GetComponent<LeaderBoardRecord>();
+            var newRecord = new GameObject("Empty Player");
+            newRecord.gameObject.AddComponent<RectTransform>();
+            var emptyRecor = newRecord.GetComponent<RectTransform>();
+            emptyRecor.SetParent(recordsHolder);
+            emptyRecor.sizeDelta = basePrefab.GetComponent<RectTransform>().sizeDelta;
+            emptyRecor.localScale = Vector3.one;
+            return emptyRecor;
+        }
+
+        RectTransform CreatePlayerRecord(GameObject prefab, Sprite rankSprite)
+        {
+            var playerRecord = Instantiate(prefab, recordsViewArea);
+            playerRecord.gameObject.name = "Player : " + _playerRecord.Username;
+            var target = playerRecord.GetComponent<LeaderBoardRecord>();
             target.transform.localScale = Vector3.one;
-            target.SetUp(record.Score, record.Username, record.Rank, rankSprite);
-            return target.gameObject;
+            target.SetUp(_playerRecord.Score, "You", _playerRecord.Rank, rankSprite);
+            target.SetColor(Color.limeGreen);
+            var rect = target.GetComponent<RectTransform>();
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.right;
+            rect.sizeDelta = Vector2.up * 130;
+            return rect;
         }
 
         private void Update()
         {
-            if (_playerRecordHolder)
+            if (_playerRecordHolder && _playerEmptyPlaceInRecords)
             {
-                var pos = new Vector2(_playerEmptyPlaceInRecords.position.x,
-                    Mathf.Clamp(_playerEmptyPlaceInRecords.position.y, recordsViewArea.offsetMin.y,
-                        recordsViewArea.offsetMax.y));
-                _playerRecordHolder.transform.position = pos;
+                Vector2 emptyPos = _playerEmptyPlaceInRecords.position;
+                float upPose = playerRecordUpPlace.transform.position.y;
+                float downPose = playerRecordDownPlace.transform.position.y;
+                Vector2 pos = new Vector2(emptyPos.x, Mathf.Clamp(emptyPos.y, downPose, upPose));
+                _playerRecordHolder.position = pos;
             }
         }
 
         string GetUsername(List<IApiLeaderboardRecord> records)
         {
-            switch (whoAmI)
+            return whoAmI switch
             {
-                case WhoAmI.First:
-                    return records[0].Username;
-                    break;
-                case WhoAmI.Forth:
-                    return records[3].Username;
-                    break;
-                case WhoAmI.Last:
-                    return records[^1].Username;
-                    break;
-                default:
-                case WhoAmI.OutOfRanks:
-                    return "You";
-            }
+                WhoAmI.First => records[0].Username,
+                WhoAmI.Forth => records[3].Username,
+                WhoAmI.Last => records[^1].Username,
+                _ => "You"
+            };
         }
     }
 }

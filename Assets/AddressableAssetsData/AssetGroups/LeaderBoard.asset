@@ -20,11 +20,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f04ed565a6f5e1d4b8c03b7e1ad2d2bc
-    m_Address: Leaderboard Player Record Variant
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: adb7ed25545ec594fa08d569c68f8998, type: 2}
   m_SchemaSet:

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
+using System.Linq;
 using System.Threading.Tasks;
 using _Scripts.Entities;
 using _Scripts.Managers;
@@ -70,10 +71,25 @@ namespace _Scripts
             }
         }
 
-        public async Task<List<IApiLeaderboardRecord>> GetRecords()
+        public async Task<List<IApiLeaderboardRecord>> GetRecords(string leaderBoardId,int limit)
         {
-            var records = await connection.GetLeaderboardRecords();
+            var records = await connection.GetLeaderboardRecords(leaderBoardId,limit);
             return records;
+        }
+
+        public async Task<IApiLeaderboardRecord> GetPlayerRank(string leaderboardId)
+        {
+            string ownerId = connection.UserId;
+            var result = await connection.Client.ListLeaderboardRecordsAroundOwnerAsync(
+                connection.Session,
+                leaderboardId,
+                connection.UserId,
+                limit: 1,
+                expiry: null
+            );
+
+            // پیدا کردن رنک خودتون
+            return result.OwnerRecords.FirstOrDefault();
         }
     }
 }
