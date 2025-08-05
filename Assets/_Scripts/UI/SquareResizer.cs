@@ -7,7 +7,6 @@ namespace _Scripts.UI
     {
         private RectTransform _rectTransform;
         private RectTransform _parentRectTransform;
-
         private void Awake()
         {
             _rectTransform = GetComponent<RectTransform>();
