@@ -23,7 +23,11 @@ namespace _Scripts
         public void SetColor(Color color)
         {
             bgColor.color = color;
+        }
 
+        public void SetName(string userName)
+        {
+            usernameText.text = userName;
         }
     }
 }

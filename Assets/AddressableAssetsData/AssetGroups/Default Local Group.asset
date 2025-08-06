@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1616a9ed47ea16c43941e02e207e10b4
+    m_Address: Panel_LeaderBoard
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 21c1c95579dd6d44fb44d14183c7cd7e
     m_Address: Gun
     m_ReadOnly: 0

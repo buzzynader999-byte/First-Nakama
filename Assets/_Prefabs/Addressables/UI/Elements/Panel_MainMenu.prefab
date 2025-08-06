@@ -1172,6 +1172,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2874829919830275006, guid: 06ada25045cafb5408557b0cac3a9c51, type: 3}
+      propertyPath: m_Name
+      value: LeaderBoard button
+      objectReference: {fileID: 0}
     - target: {fileID: 3688821614413173695, guid: 06ada25045cafb5408557b0cac3a9c51, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

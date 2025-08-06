@@ -15,11 +15,6 @@ MonoBehaviour:
   m_GroupName: Panel
   m_GUID: 498041c0912f8af4881af074ab2b201e
   m_SerializeEntries:
-  - m_GUID: 1616a9ed47ea16c43941e02e207e10b4
-    m_Address: Panel_LeaderBoard
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7676891d78e4ed84fa436af589ce30b3
     m_Address: Panel_Game
     m_ReadOnly: 0

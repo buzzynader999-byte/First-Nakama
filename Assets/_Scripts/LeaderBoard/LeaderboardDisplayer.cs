@@ -148,7 +148,8 @@ namespace _Scripts
                 record.SetUp(targetRecord.Score, targetRecord.Username, targetRecord.Rank, specialRanks[index]);
                 if (targetRecord.Username == myUsername)
                 {
-                    record.SetColor(Color.limeGreen);
+                    //record.SetColor(Color.limeGreen);
+                    record.SetName("You");
                 }
             }
         }
