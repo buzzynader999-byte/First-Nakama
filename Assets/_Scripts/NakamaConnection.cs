@@ -1,35 +1,36 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Nakama;
 using UnityEngine;
 
 namespace _Scripts
 {
-    public class NakamaConnection : MonoBehaviour
+    [CreateAssetMenu(fileName = "New Nakama connection", menuName = "SO/Nakama Connection", order = 0)]
+    public class NakamaConnection : ScriptableObject
     {
-        private readonly string _scheme = "http";
-        private readonly string _host = "localhost";
-        [SerializeField] int _port = 7350;
-        private readonly string _key = "defaultkey";
-        IClient _client;
+        [SerializeField] private string scheme = "http";
+        [SerializeField] private string host = "localhost";
+        [SerializeField] private int port = 7350;
+        [SerializeField] private string key = "defaultkey";
+        [SerializeField] private bool displayLogs;
+
         public IClient Client => _client;
-        ISocket _socket;
+        IClient _client;
         public ISocket Socket => _socket;
-        public static Action OnSocketCreated;
-        public string UserName => _session.Username;
-        public string UserId => _session.UserId;
-        ISession _session;
+        ISocket _socket;
         public ISession Session => _session;
+        ISession _session;
         IMatch _match;
+        public string UserId => _session.UserId;
+        public string UserName => _session.Username;
+        public static Action OnSocketCreated;
+
         private string _ticket;
         private string _matchID;
 
         public async Task Connect()
         {
-            _client = new Client(_scheme, _host, _port, _key, UnityWebRequestAdapter.Instance);
+            _client = new Client(scheme, host, port, key, UnityWebRequestAdapter.Instance);
             _session = await _client.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier);
             _socket = _client.NewSocket();
             OnSocketCreated?.Invoke();
@@ -38,13 +39,13 @@ namespace _Scripts
             _socket.ReceivedMatchmakerMatched += OnReceivedMatchMakerMatched;
             //_socket.ReceivedMatchState += OnReceivedMatchState;
 
-            print(_session);
-            print(_socket);
+            LogIt(_session);
+            LogIt(_socket);
         }
 
         public async Task FindMatch()
         {
-            print("FindMatch");
+            LogIt("FindMatch");
             if (!_socket.IsConnected)
             {
                 _session = await _client.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier);
@@ -60,19 +61,19 @@ namespace _Scripts
         {
             try
             {
-                print("Found matchmaker");
+                LogIt("Found matchmaker");
                 _match = await _socket.JoinMatchAsync(matchmaker);
                 _matchID = _match.Id;
-                print("joined matchmaker");
-                print(_match.Self.SessionId);
+                Debug.Log("joined matchmaker");
+                Debug.Log(_match.Self.SessionId);
                 foreach (var users in _match.Presences)
                 {
-                    Debug.Log(users.SessionId);
+                    LogIt(users.SessionId);
                 }
             }
             catch (Exception e)
             {
-                print(e.Message);
+                LogIt(e.Message);
             }
         }
 
@@ -90,6 +91,14 @@ namespace _Scripts
         public async Task SubmitScore(int newScore)
         {
             var r = await _client.WriteLeaderboardRecordAsync(_session, "attack", newScore);
+        }
+
+        void LogIt(object message)
+        {
+            if (displayLogs)
+            {
+                Debug.Log(message);
+            }
         }
     }
 }

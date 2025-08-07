@@ -1529,6 +1529,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2961398697945261496, guid: 62ceb75ac0d19334dab0d81a88214475, type: 3}
+      propertyPath: nakamaConnection
+      value: 
+      objectReference: {fileID: 11400000, guid: c155aafd07fda274f9c804e9a501cc69, type: 2}
     - target: {fileID: 4699335182184694150, guid: 62ceb75ac0d19334dab0d81a88214475, type: 3}
       propertyPath: m_Name
       value: Game Manager
