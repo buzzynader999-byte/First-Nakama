@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2740cffea71f2ad44b7656e21af64664, type: 3}
   m_Name: Remote onnection
   m_EditorClassIdentifier: 
-  scheme: https
+  scheme: http
   host: 192.168.1.112
   port: 7350
   key: defaultkey

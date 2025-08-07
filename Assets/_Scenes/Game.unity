@@ -345,7 +345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6752985163057300104, guid: 1616a9ed47ea16c43941e02e207e10b4, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7190980515232859019, guid: 1616a9ed47ea16c43941e02e207e10b4, type: 3}
       propertyPath: m_LocalScale.x
@@ -1540,6 +1540,10 @@ PrefabInstance:
     - target: {fileID: 4699335182184694150, guid: 62ceb75ac0d19334dab0d81a88214475, type: 3}
       propertyPath: m_Name
       value: Game Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 4699335182184694150, guid: 62ceb75ac0d19334dab0d81a88214475, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8501869516672201373, guid: 62ceb75ac0d19334dab0d81a88214475, type: 3}
       propertyPath: m_LocalPosition.x

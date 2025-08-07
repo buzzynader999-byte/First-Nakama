@@ -10,5 +10,16 @@ namespace _Scripts.UI.Elements
             ServiceLocator.Instance.Get<UIManager>().Close(this);
             ServiceLocator.Instance.Get<UIManager>().OpenOptionsInGame();
         }
+
+        public void AddToScore()
+        {
+            ServiceLocator.Instance.Get<ScoreManager>().AddScore(5);
+        }
+
+        public async void SubmitScore()
+        {
+            await ServiceLocator.Instance.Get<ScoreManager>().SubmitScores();
+
+        }
     }
 }

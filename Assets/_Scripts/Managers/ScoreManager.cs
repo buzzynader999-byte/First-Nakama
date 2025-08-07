@@ -46,7 +46,12 @@ namespace _Scripts
 
         private void OnPlayerAttacked()
         {
-            CurrentScore += 5;
+            AddScore(5);
+        }
+
+        public void AddScore(int score)
+        {
+            CurrentScore += score;
             print("Score in local: " + CurrentScore);
             onScoreChanged?.Invoke(CurrentScore);
         }
