@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace _Scripts.Entities
+namespace _Scripts.PlayerScripts
 {
     public class PlayerMovementController : MonoBehaviour
     {

@@ -88,6 +88,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9059009329833739634, guid: eea4483187872484eb509a0a21db710c, type: 3}
+      propertyPath: m_Color.b
+      value: 0.15294117
+      objectReference: {fileID: 0}
+    - target: {fileID: 9059009329833739634, guid: eea4483187872484eb509a0a21db710c, type: 3}
+      propertyPath: m_Color.g
+      value: 0.47600412
+      objectReference: {fileID: 0}
+    - target: {fileID: 9059009329833739634, guid: eea4483187872484eb509a0a21db710c, type: 3}
+      propertyPath: m_Color.r
+      value: 0.8862745
+      objectReference: {fileID: 0}
     - target: {fileID: 9146471701571205326, guid: eea4483187872484eb509a0a21db710c, type: 3}
       propertyPath: m_Name
       value: Friends Variant

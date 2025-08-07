@@ -1,7 +1,6 @@
 ﻿using Nakama;
-using UnityEngine;
 
-namespace _Scripts.Entities
+namespace _Scripts.PlayerScripts
 {
     public class RemotePlayerNetworkData
     {

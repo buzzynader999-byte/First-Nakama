@@ -1,9 +1,6 @@
-﻿using System;
-using _Scripts.PlayerScripts;
-using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using UnityEngine;
 
-namespace _Scripts.Entities
+namespace _Scripts.PlayerScripts
 {
     public class PlayerInputController : MonoBehaviour
     {

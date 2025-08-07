@@ -1,5 +1,5 @@
 ﻿using System;
-using _Scripts.Entities;
+using _Scripts.PlayerScripts;
 using _Scripts.Tools;
 using _Scripts.Tools.Service_Locator;
 using _Scripts.UI;

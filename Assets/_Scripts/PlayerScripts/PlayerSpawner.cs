@@ -3,9 +3,8 @@ using System.Threading.Tasks;
 using Nakama;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace _Scripts.Entities
+namespace _Scripts.PlayerScripts
 {
     public class PlayerSpawner : MonoBehaviour
     {

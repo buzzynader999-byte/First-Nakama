@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-namespace _Scripts.Entities
+namespace _Scripts.PlayerScripts
 {
     public class PlayerHealthController : MonoBehaviour
     {

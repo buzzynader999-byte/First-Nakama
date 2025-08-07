@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Threading.Tasks;
-using _Scripts.Entities;
+using _Scripts.LeaderBoard;
 using _Scripts.Managers;
+using _Scripts.PlayerScripts;
 using _Scripts.Tools.Service_Locator;
-using _Scripts.Weapoons;
 using Nakama;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,9 +27,8 @@ namespace _Scripts
         private async void Start()
         {
             connection = GameManager.Instance.NakamaConnection;
-            var loadedScore = await connection.GetScoreOfThisUser();
+            var loadedScore = await LeaderBoardInterface.GetScoreOfThisUser(connection, "attack");
             onServerScoreChanged?.Invoke(loadedScore);
-            print("Current ServerScore : " + loadedScore);
         }
 
         private void OnPlayerAttacked()
@@ -47,14 +43,8 @@ namespace _Scripts
             print("Trying to submit scores");
             try
             {
-                /* if (connection.Socket?.IsConnected == false)
-                 {
-                     Debug.LogWarning("Socket not connected, attempting to reconnect...");
-                     await connection.Connect();
-                 }
- */
                 await connection.SubmitScore(CurrentScore);
-                ScoreInServer = await connection.GetScoreOfThisUser();
+                ScoreInServer = await LeaderBoardInterface.GetScoreOfThisUser(connection, "attack");
                 onServerScoreChanged?.Invoke(ScoreInServer);
             }
             catch (Exception e)
@@ -71,9 +61,9 @@ namespace _Scripts
             }
         }
 
-        public async Task<List<IApiLeaderboardRecord>> GetRecords(string leaderBoardId,int limit)
+        public async Task<List<IApiLeaderboardRecord>> GetRecords(string leaderBoardId, int limit)
         {
-            var records = await connection.GetLeaderboardRecords(leaderBoardId,limit);
+            var records = await LeaderBoardInterface.GetRecords(connection, leaderBoardId, null, null, limit);
             return records;
         }
 

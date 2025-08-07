@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Scripts
+namespace _Scripts.LeaderBoard
 {
     public class LeaderBoardRecord : MonoBehaviour
     {

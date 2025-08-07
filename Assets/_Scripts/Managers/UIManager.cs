@@ -1,10 +1,7 @@
-﻿using System;
-using _Scripts.Managers;
-using _Scripts.Tools.Service_Locator;
+﻿using _Scripts.Tools.Service_Locator;
 using _Scripts.UI.Elements;
-using UnityEngine;
 
-namespace _Scripts.UI
+namespace _Scripts.Managers
 {
     public class UIManager : Service
     {

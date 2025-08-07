@@ -91,22 +91,5 @@ namespace _Scripts
         {
             var r = await _client.WriteLeaderboardRecordAsync(_session, "attack", newScore);
         }
-
-        public async Task<int> GetScoreOfThisUser()
-        {
-            var leaderBoardScore = await _client.ListLeaderboardRecordsAsync(_session, "attack", null, null, 1);
-            var records = new List<IApiLeaderboardRecord>(leaderBoardScore.Records.ToList());
-            if (records.Count >= 1)
-                if (!String.IsNullOrEmpty(records[0]?.Score))
-                    return int.Parse(records[0].Score);
-            return 0;
-        }
-
-        public async Task<List<IApiLeaderboardRecord>> GetLeaderboardRecords(string leaderBoardId,int limit)
-        {
-            var leaderBoardScore = await _client.ListLeaderboardRecordsAsync(_session, leaderBoardId, null, null, limit);
-            var records = new List<IApiLeaderboardRecord>(leaderBoardScore.Records.ToList());
-            return records;
-        }
     }
 }

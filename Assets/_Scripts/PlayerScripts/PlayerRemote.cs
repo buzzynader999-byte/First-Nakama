@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using _Scripts.Managers;
-using _Scripts.PlayerScripts;
 using Nakama;
 using Nakama.TinyJson;
 using UnityEngine;
 
-namespace _Scripts.Entities
+namespace _Scripts.PlayerScripts
 {
     [RequireComponent(typeof(PlayerHealthController))]
     public class PlayerRemote : MonoBehaviour

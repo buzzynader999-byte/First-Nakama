@@ -1,6 +1,4 @@
-﻿using System;
-using _Scripts.Entities;
-using _Scripts.Weapoons;
+﻿using _Scripts.Weapoons;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 

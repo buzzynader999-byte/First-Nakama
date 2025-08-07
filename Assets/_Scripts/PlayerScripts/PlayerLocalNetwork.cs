@@ -2,9 +2,8 @@
 using _Scripts.Managers;
 using _Scripts.Tools;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace _Scripts.Entities
+namespace _Scripts.PlayerScripts
 {
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(PlayerHealthController))]

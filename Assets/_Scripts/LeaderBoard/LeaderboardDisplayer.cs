@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using _Scripts.Managers;
 using _Scripts.Tools.Service_Locator;
 using Nakama;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace _Scripts
+namespace _Scripts.LeaderBoard
 {
     public enum WhoAmI
     {
@@ -22,7 +22,6 @@ namespace _Scripts
 
     public class LeaderboardDisplayer : MonoBehaviour
     {
-        AsyncOperationHandle<GameObject> leaderboardRecordAsyncOperation;
         [SerializeField] WhoAmI whoAmI = WhoAmI.First;
         [SerializeField] private AssetReferenceGameObject leaderboardRecordPrefab;
         [SerializeField] Sprite[] specialRanks;
@@ -34,33 +33,46 @@ namespace _Scripts
         [SerializeField] private RectTransform recordsViewArea;
         [SerializeField] private RectTransform playerRecordUpPlace;
         [SerializeField] private RectTransform playerRecordDownPlace;
+        [SerializeField] private TextMeshProUGUI expireTimeText;
+        AsyncOperationHandle<GameObject> leaderboardRecordAsyncOperation;
+        private IApiLeaderboardRecord _playerRecord;
         private string myUsername;
+        private string _leaderBoardExpiretime;
         private RectTransform _playerRecordHolder;
         private RectTransform _playerEmptyPlaceInRecords;
-        private IApiLeaderboardRecord _playerRecord;
-        private bool _recordsCreated = false;
+        private bool _recordsCreated;
+
+        private NakamaConnection _connection => GameManager.Instance.NakamaConnection;
 
         private async void OnEnable()
         {
-            if (transform.childCount > 0)
+            try
             {
-                foreach (Transform child in recordsHolder)
+                await GetLeaderboardRemainingTimeAsync("attack");
+                if (transform.childCount > 0)
                 {
-                    print("Destroying " + child.name);
-                    Destroy(child.gameObject);
+                    foreach (Transform child in recordsHolder)
+                    {
+                        print("Destroying " + child.name);
+                        Destroy(child.gameObject);
+                    }
+                }
+
+                if (!_recordsCreated)
+                {
+                    if (!leaderboardRecordAsyncOperation.IsValid())
+                    {
+                        leaderboardRecordAsyncOperation = leaderboardRecordPrefab.LoadAssetAsync();
+                        await leaderboardRecordAsyncOperation.Task;
+                    }
+
+                    await LeaderboardRecordAsyncOperationOnCompleted(leaderboardRecordAsyncOperation);
+                    _recordsCreated = true;
                 }
             }
-
-            if (!_recordsCreated)
+            catch (Exception e)
             {
-                if (!leaderboardRecordAsyncOperation.IsValid())
-                {
-                    leaderboardRecordAsyncOperation = leaderboardRecordPrefab.LoadAssetAsync();
-                    await leaderboardRecordAsyncOperation.Task;
-                }
-
-                await LeaderboardRecordAsyncOperationOnCompleted(leaderboardRecordAsyncOperation);
-                _recordsCreated = true;
+                Debug.Log(e);
             }
         }
 
@@ -71,7 +83,6 @@ namespace _Scripts
             {
                 foreach (Transform child in recordsHolder)
                 {
-                    print("Destroying " + child.name);
                     Destroy(child.gameObject);
                 }
             }
@@ -103,15 +114,13 @@ namespace _Scripts
             if (whoAmI == WhoAmI.Original)
             {
                 _playerRecord = playerRecord;
-                myUsername = GameManager.Instance.NakamaConnection.UserName;
+                myUsername = _connection.UserName;
             }
             else
             {
                 myUsername = GetUsername(records);
             }
 
-            /*for (int i = 0; i < Mathf.Min(specialRanks.Length, records.Count); i++)
-                CreateNewRecord(obj.Result, records[i], specialRanks[i]);*/
             SetUpTopThree(record1, 0);
             SetUpTopThree(record2, 1);
             SetUpTopThree(record3, 2);
@@ -166,7 +175,7 @@ namespace _Scripts
             var rect = target.GetComponent<RectTransform>();
             rect.anchorMin = Vector2.zero;
             rect.anchorMax = Vector2.right;
-            rect.sizeDelta = Vector2.up * 130;
+            //rect.sizeDelta = Vector2.up * 300;
             return rect;
         }
 
@@ -210,7 +219,7 @@ namespace _Scripts
             var rect = target.GetComponent<RectTransform>();
             rect.anchorMin = Vector2.zero;
             rect.anchorMax = Vector2.right;
-            rect.sizeDelta = Vector2.up * 130;
+            //rect.sizeDelta = Vector2.up * 300;
             return rect;
         }
 
@@ -224,6 +233,33 @@ namespace _Scripts
                 Vector2 pos = new Vector2(emptyPos.x, Mathf.Clamp(emptyPos.y, downPose, upPose));
                 _playerRecordHolder.position = pos;
             }
+
+            if (Time.frameCount % 20 == 0)
+                UpdateExpireTime(_leaderBoardExpiretime);
+        }
+
+        void UpdateExpireTime(string targetDateString)
+        {
+            print(String.IsNullOrEmpty(targetDateString));
+            if (DateTimeOffset.TryParse(targetDateString, out DateTimeOffset targetDate))
+            {
+                DateTimeOffset currentDate = DateTimeOffset.UtcNow;
+                TimeSpan timeRemaining = targetDate - currentDate;
+                if (timeRemaining.TotalSeconds > 0)
+                {
+                    int days = timeRemaining.Days;
+                    int hours = timeRemaining.Hours;
+                    int minutes = timeRemaining.Minutes;
+                    int seconds = timeRemaining.Seconds;
+                    expireTimeText.text = days + " : " + hours + " : " + minutes + " : " + seconds;
+                }
+                else
+                    Debug.Log("time expired!");
+            }
+            else
+            {
+                Debug.Log("can not convert date string!");
+            }
         }
 
         string GetUsername(List<IApiLeaderboardRecord> records)
@@ -235,6 +271,15 @@ namespace _Scripts
                 WhoAmI.Last => records[^1].Username,
                 _ => "You"
             };
+        }
+
+        private async Task GetLeaderboardRemainingTimeAsync(string leaderboardId)
+        {
+            var records = await LeaderBoardInterface.GetRecords(_connection, leaderboardId, null, null, 1);
+            if (records?.Count >= 1)
+            {
+                _leaderBoardExpiretime = records[0].ExpiryTime;
+            }
         }
     }
 }
