@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using _Scripts.PlayerScripts;
 using _Scripts.Tools;
 using _Scripts.Tools.Service_Locator;
@@ -13,6 +14,8 @@ namespace _Scripts.Managers
         [SerializeField] NakamaConnection nakamaConnection;
         public NakamaConnection NakamaConnection => nakamaConnection;
         private ISocket _socket => nakamaConnection.Socket;
+        public static Action OnConnectedToNakama;
+
         private IUserPresence _localUser;
         private IMatch _currentMatch;
         public static GameManager Instance;
@@ -22,7 +25,7 @@ namespace _Scripts.Managers
             try
             {
                 Instance = this;
-                await nakamaConnection.Connect();
+                await TryConnect();
             }
             catch (Exception e)
             {
@@ -42,7 +45,6 @@ namespace _Scripts.Managers
 
         private void Start()
         {
-            ServiceLocator.Instance.Get<UIManager>().OpenMainMenu();
         }
 
         void SubscribeToSocket()
@@ -172,6 +174,28 @@ namespace _Scripts.Managers
         private void OnDestroy()
         {
             nakamaConnection.LeaveMatch();
+        }
+
+        public async Task TryConnect()
+        {
+            try
+            {
+                var status = await nakamaConnection.Connect();
+                if(status)
+                {
+                    ServiceLocator.Instance.Get<UIManager>().OpenMainMenu();
+                    OnConnectedToNakama?.Invoke();
+                }
+                else
+                {
+                    throw new Exception("Could not connect to nakama");
+                }
+            }
+            catch (Exception e)
+            {
+                UIManager.Instance.OpenRetryConnection();
+                Debug.Log(e);
+            }
         }
     }
 }

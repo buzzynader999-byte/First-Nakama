@@ -14,21 +14,34 @@ namespace _Scripts
 {
     public class ScoreManager : Service
     {
-        private NakamaConnection connection;
+        private NakamaConnection connection => GameManager.Instance.NakamaConnection;
         public static Action<int> onScoreChanged;
         public static Action<int> onServerScoreChanged;
         public int CurrentScore { get; private set; }
         public int ScoreInServer { get; private set; }
 
-        private void OnEnable() => PlayerLocalNetwork.onPlayerAttacked += OnPlayerAttacked;
-
-        private void OnDisable() => PlayerLocalNetwork.onPlayerAttacked -= OnPlayerAttacked;
-
-        private async void Start()
+        private void OnEnable()
         {
-            connection = GameManager.Instance.NakamaConnection;
-            var loadedScore = await LeaderBoardInterface.GetScoreOfThisUser(connection, "attack");
-            onServerScoreChanged?.Invoke(loadedScore);
+            PlayerLocalNetwork.onPlayerAttacked += OnPlayerAttacked;
+            GameManager.OnConnectedToNakama += OnConnectedToNakama;
+        }
+
+        private async void OnConnectedToNakama()
+        {
+            try
+            {
+                var loadedScore = await LeaderBoardInterface.GetScoreOfThisUser(connection, "attack");
+                onServerScoreChanged?.Invoke(loadedScore);
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+            }
+        }
+
+        private void OnDisable()
+        {
+            PlayerLocalNetwork.onPlayerAttacked -= OnPlayerAttacked;
         }
 
         private void OnPlayerAttacked()

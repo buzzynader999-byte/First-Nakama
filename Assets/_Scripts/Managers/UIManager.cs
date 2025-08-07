@@ -58,5 +58,10 @@ namespace _Scripts.Managers
         {
             _client.CloseOverlay(target);
         }
+
+        public void OpenRetryConnection()
+        {
+            _client.OpenOverlay<Popup_Retry>(false,true);
+        }
     }
 }

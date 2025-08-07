@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Popup
   m_GUID: 0bf9c179d86ab0042b729fa3603f5783
   m_SerializeEntries:
+  - m_GUID: 1720a286093682f4caf2aa013ba2c751
+    m_Address: Popup_Retry
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6e1fa37312e041b43b3fca9d98bd076f
     m_Address: Popup_MatchMaking
     m_ReadOnly: 0

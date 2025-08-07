@@ -15,7 +15,8 @@ namespace _Scripts.LeaderBoard
             try
             {
                 var leaderBoardScore =
-                    await connection.Client.ListLeaderboardRecordsAsync(connection.Session, leaderBoardId, ownerIds, expiry,
+                    await connection.Client.ListLeaderboardRecordsAsync(connection.Session, leaderBoardId, ownerIds,
+                        expiry,
                         limit);
                 var records = new List<IApiLeaderboardRecord>(leaderBoardScore.Records.ToList());
                 return records;
@@ -31,7 +32,7 @@ namespace _Scripts.LeaderBoard
         {
             try
             {
-                var records = await GetRecords(connection,leaderBoardId,null,null,1);
+                var records = await GetRecords(connection, leaderBoardId, null, null, 1);
                 if (records.Count >= 1)
                     if (!String.IsNullOrEmpty(records[0]?.Score))
                         return int.Parse(records[0].Score);

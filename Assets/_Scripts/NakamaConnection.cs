@@ -28,19 +28,38 @@ namespace _Scripts
         private string _ticket;
         private string _matchID;
 
-        public async Task Connect()
+        public async Task<bool> Connect()
         {
-            _client = new Client(scheme, host, port, key, UnityWebRequestAdapter.Instance);
-            _session = await _client.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier);
-            _socket = _client.NewSocket();
-            OnSocketCreated?.Invoke();
-            await _socket.ConnectAsync(_session, true);
-
-            _socket.ReceivedMatchmakerMatched += OnReceivedMatchMakerMatched;
-            //_socket.ReceivedMatchState += OnReceivedMatchState;
-
-            LogIt(_session);
-            LogIt(_socket);
+            try
+            {
+                _client = new Client(scheme, host, port, key, UnityWebRequestAdapter.Instance);
+                _session = await _client.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier);
+                if (_session == null || _session.IsExpired)
+                {
+                    Debug.LogError("Authentication failed or session is expired");
+                    return false;
+                }
+                _socket = _client.NewSocket();
+                if (_socket == null)
+                {
+                    Debug.LogError("Failed to create socket");
+                    return false;
+                }
+                OnSocketCreated?.Invoke();
+                _socket.ReceivedMatchmakerMatched += OnReceivedMatchMakerMatched;
+                //_socket.ReceivedMatchState += OnReceivedMatchState;
+                
+                await _socket.ConnectAsync(_session, appearOnline: true);
+                Debug.Log($"Session: {_session}");
+                Debug.Log($"Socket: {_socket}");
+        
+                return _socket.IsConnected;
+            }
+            catch (Exception ex)
+            {
+                Debug.Log($"Connection failed: {ex.Message}");
+                return false;
+            }
         }
 
         public async Task FindMatch()
