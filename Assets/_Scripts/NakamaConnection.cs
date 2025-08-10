@@ -10,6 +10,7 @@ namespace _Scripts
     {
         [SerializeField] private string scheme = "http";
         [SerializeField] private string host = "localhost";
+        public string Host { set; get; }
         [SerializeField] private int port = 7350;
         [SerializeField] private string key = "defaultkey";
         [SerializeField] private bool displayLogs;
@@ -39,20 +40,22 @@ namespace _Scripts
                     Debug.LogError("Authentication failed or session is expired");
                     return false;
                 }
+
                 _socket = _client.NewSocket();
                 if (_socket == null)
                 {
                     Debug.LogError("Failed to create socket");
                     return false;
                 }
+
                 OnSocketCreated?.Invoke();
                 _socket.ReceivedMatchmakerMatched += OnReceivedMatchMakerMatched;
                 //_socket.ReceivedMatchState += OnReceivedMatchState;
-                
+
                 await _socket.ConnectAsync(_session, appearOnline: true);
                 Debug.Log($"Session: {_session}");
                 Debug.Log($"Socket: {_socket}");
-        
+
                 return _socket.IsConnected;
             }
             catch (Exception ex)
