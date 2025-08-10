@@ -22,13 +22,11 @@ namespace _Scripts.LeaderBoard
 
     public class LeaderboardDisplayer : MonoBehaviour
     {
-        [SerializeField] WhoAmI whoAmI = WhoAmI.First;
+        //[SerializeField] WhoAmI whoAmI = WhoAmI.First;
         [SerializeField] private AssetReferenceGameObject leaderboardRecordPrefab;
         [SerializeField] Sprite[] specialRanks;
         [SerializeField] Sprite regularRank;
-        [SerializeField] private LeaderBoardRecord record1;
-        [SerializeField] private LeaderBoardRecord record2;
-        [SerializeField] private LeaderBoardRecord record3;
+        [SerializeField] private List<LeaderBoardRecord> topThree;
         [SerializeField] private RectTransform recordsHolder;
         [SerializeField] private RectTransform recordsViewArea;
         [SerializeField] private RectTransform playerRecordUpPlace;
@@ -46,34 +44,29 @@ namespace _Scripts.LeaderBoard
 
         private async void OnEnable()
         {
-            try
+            /*try
+            {*/
+            await GetLeaderboardRemainingTimeAsync("attack");
+            if (transform.childCount > 0)
+                foreach (Transform child in recordsHolder)
+                    Destroy(child.gameObject);
+
+            if (!_recordsCreated)
             {
-                await GetLeaderboardRemainingTimeAsync("attack");
-                if (transform.childCount > 0)
+                if (!leaderboardRecordAsyncOperation.IsValid())
                 {
-                    foreach (Transform child in recordsHolder)
-                    {
-                        print("Destroying " + child.name);
-                        Destroy(child.gameObject);
-                    }
+                    leaderboardRecordAsyncOperation = leaderboardRecordPrefab.LoadAssetAsync();
+                    await leaderboardRecordAsyncOperation.Task;
                 }
 
-                if (!_recordsCreated)
-                {
-                    if (!leaderboardRecordAsyncOperation.IsValid())
-                    {
-                        leaderboardRecordAsyncOperation = leaderboardRecordPrefab.LoadAssetAsync();
-                        await leaderboardRecordAsyncOperation.Task;
-                    }
-
-                    await LeaderboardRecordAsyncOperationOnCompleted(leaderboardRecordAsyncOperation);
-                    _recordsCreated = true;
-                }
+                await LeaderboardRecordAsyncOperationOnCompleted(leaderboardRecordAsyncOperation);
+                _recordsCreated = true;
             }
+            /*}
             catch (Exception e)
             {
                 Debug.Log(e);
-            }
+            }*/
         }
 
         private void OnDisable()
@@ -109,9 +102,11 @@ namespace _Scripts.LeaderBoard
             }
 
             var records = await ServiceLocator.Instance.Get<ScoreManager>().GetRecords("attack", 100);
+            var usersInLeaderBoard = await LeaderBoardInterface.GetUsersFromUserId(_connection, records);
+
             if (records == null || records.Count == 0) return;
             var playerRecord = await ServiceLocator.Instance.Get<ScoreManager>().GetPlayerRank("attack");
-            if (whoAmI == WhoAmI.Original)
+/*            if (whoAmI == WhoAmI.Original)
             {
                 _playerRecord = playerRecord;
                 myUsername = _connection.UserName;
@@ -120,12 +115,12 @@ namespace _Scripts.LeaderBoard
             {
                 myUsername = GetUsername(records);
             }
+*/
+            _playerRecord = playerRecord;
+            myUsername = _connection.UserName;
+            SetUpTopThree(topThree, records);
 
-            SetUpTopThree(record1, 0);
-            SetUpTopThree(record2, 1);
-            SetUpTopThree(record3, 2);
-
-            //بقیه رکوردها
+            // display other records
             if (records.Count > 3)
             {
                 for (int i = specialRanks.Length; i < records.Count; i++)
@@ -134,37 +129,50 @@ namespace _Scripts.LeaderBoard
 
             if (!_playerEmptyPlaceInRecords)
             {
+                if (playerRecord == null) return;
                 _playerEmptyPlaceInRecords = CreateEmptyRecord(obj.Result);
-                if (whoAmI == WhoAmI.Original)
-                {
-                    _playerRecordHolder = CreatePlayerRecord(obj.Result,
-                        int.Parse(this._playerRecord.Rank) <= 3
-                            ? specialRanks[int.Parse(this._playerRecord.Rank)]
-                            : regularRank);
-                }
+                _playerRecordHolder = CreatePlayerRecord(obj.Result,
+                    int.Parse(_playerRecord.Rank) <= 3
+                        ? specialRanks[int.Parse(_playerRecord.Rank) - 1]
+                        : regularRank);
+                /*}
                 else if (whoAmI == WhoAmI.OutOfRanks)
                 {
                     _playerRecordHolder = MockPlayerRecord(obj.Result, "fakePlayer", "1",
                         100 <= 3
                             ? specialRanks[100]
                             : regularRank, "100");
-                }
+                }*/
             }
 
-            void SetUpTopThree(LeaderBoardRecord record, int index)
+            void SetUpTopThree(List<LeaderBoardRecord> topThree, List<IApiLeaderboardRecord> records)
             {
-                var targetRecord = records[index];
-                record.SetUp(targetRecord.Score, targetRecord.Username, targetRecord.Rank, specialRanks[index]);
-                if (targetRecord.Username == myUsername)
+                for (int i = 0; i < 3; i++)
                 {
-                    //record.SetColor(Color.limeGreen);
-                    record.SetName("You");
+                    if (records.Count >= i + 1 && records[i] != null)
+                    {
+                        var targetRecord = records[i];
+                        var displayName = usersInLeaderBoard[i].DisplayName;
+                        if (targetRecord != null)
+                            topThree[i].SetUp(targetRecord.Score, displayName ?? targetRecord.Username,
+                                targetRecord.Rank,
+                                specialRanks[i]);
+                        /*if (targetRecord.Username == myUsername)
+                        {
+                            //record.SetColor(Color.limeGreen);
+                            record.SetName("You");
+                        }*/
+                    }
+                    else
+                    {
+                        topThree[i].gameObject.SetActive(false);
+                    }
                 }
             }
         }
 
 
-        RectTransform MockPlayerRecord(GameObject prefab, string userName, string score, Sprite sprite, string rank)
+        /*RectTransform MockPlayerRecord(GameObject prefab, string userName, string score, Sprite sprite, string rank)
         {
             var playerRecord = Instantiate(prefab, recordsViewArea);
             playerRecord.gameObject.name = "Player : " + userName;
@@ -177,7 +185,7 @@ namespace _Scripts.LeaderBoard
             rect.anchorMax = Vector2.right;
             //rect.sizeDelta = Vector2.up * 300;
             return rect;
-        }
+        }*/
 
         void CreateNewRecord(GameObject prefab, IApiLeaderboardRecord record, Sprite rankSprite)
         {
@@ -185,8 +193,8 @@ namespace _Scripts.LeaderBoard
             if (record.Username == myUsername)
             {
                 _playerEmptyPlaceInRecords = CreateEmptyRecord(prefab);
-                if (whoAmI != WhoAmI.Original)
-                    _playerRecord = record;
+                //if (whoAmI != WhoAmI.Original)
+                //    _playerRecord = record;
                 _playerRecordHolder = CreatePlayerRecord(prefab, specialRanks[0]);
             }
             else
@@ -214,7 +222,7 @@ namespace _Scripts.LeaderBoard
             playerRecord.gameObject.name = "Player : " + _playerRecord.Username;
             var target = playerRecord.GetComponent<LeaderBoardRecord>();
             target.transform.localScale = Vector3.one;
-            target.SetUp(_playerRecord.Score, "You", _playerRecord.Rank, rankSprite);
+            target.SetUp(_playerRecord.Score, _playerRecord.Username, _playerRecord.Rank, rankSprite);
             target.SetColor(Color.limeGreen);
             var rect = target.GetComponent<RectTransform>();
             rect.anchorMin = Vector2.zero;
@@ -240,7 +248,6 @@ namespace _Scripts.LeaderBoard
 
         void UpdateExpireTime(string targetDateString)
         {
-            print(String.IsNullOrEmpty(targetDateString));
             if (DateTimeOffset.TryParse(targetDateString, out DateTimeOffset targetDate))
             {
                 DateTimeOffset currentDate = DateTimeOffset.UtcNow;
@@ -262,7 +269,7 @@ namespace _Scripts.LeaderBoard
             }
         }
 
-        string GetUsername(List<IApiLeaderboardRecord> records)
+        /*string GetUsername(List<IApiLeaderboardRecord> records)
         {
             return whoAmI switch
             {
@@ -271,7 +278,7 @@ namespace _Scripts.LeaderBoard
                 WhoAmI.Last => records[^1].Username,
                 _ => "You"
             };
-        }
+        }*/
 
         private async Task GetLeaderboardRemainingTimeAsync(string leaderboardId)
         {

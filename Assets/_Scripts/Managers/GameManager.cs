@@ -43,10 +43,6 @@ namespace _Scripts.Managers
             NakamaConnection.OnSocketCreated -= SubscribeToSocket;
         }
 
-        private void Start()
-        {
-        }
-
         void SubscribeToSocket()
         {
             var mainThread = UnityMainThreadDispatcher.Instance();

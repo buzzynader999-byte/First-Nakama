@@ -30,13 +30,15 @@ namespace _Scripts.Managers
         {
             _client.OpenOverlay<Panel_LeaderBoard>(false, true);
         }
+
         public void ExitGame()
         {
-            ScoreManager sM =ServiceLocator.Instance.Get<ScoreManager>(); 
+            ScoreManager sM = ServiceLocator.Instance.Get<ScoreManager>();
             sM.SubmitScores();
-            print("Added to scores in server | current score : " + sM.CurrentScore + " | Score in Server: " + sM.ScoreInServer);
+            print("Added to scores in server | current score : " + sM.CurrentScore + " | Score in Server: " +
+                  sM.ScoreInServer);
         }
-        
+
         public void OpenMainMenu()
         {
             _client.Clear();
@@ -45,7 +47,7 @@ namespace _Scripts.Managers
 
         public void OpenGameMenu()
         {
-           _client.Clear();
+            _client.Clear();
             _client.OpenOverlay<Panel_Game>();
         }
 
@@ -61,7 +63,17 @@ namespace _Scripts.Managers
 
         public void OpenRetryConnection()
         {
-            _client.OpenOverlay<Popup_Retry>(false,true);
+            _client.OpenOverlay<Popup_Retry>(false, true);
+        }
+
+        public void OpenProfile()
+        {
+            _client.OpenOverlay<Panel_Profile>(false, true);
+        }
+
+        public void OpenRenamingPopup()
+        {
+            _client.OpenOverlay<Popup_Renaming>(false, true);
         }
     }
 }

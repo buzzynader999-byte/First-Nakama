@@ -28,6 +28,11 @@ namespace _Scripts.UI.Elements
         public async void SubmitScore()
         {
             await ServiceLocator.Instance.Get<ScoreManager>().SubmitScores();
+        }
+
+        public void OpenProfile()
+        {
+            ServiceLocator.Instance.Get<UIManager>().OpenProfile();
 
         }
     }

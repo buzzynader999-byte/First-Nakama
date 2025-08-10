@@ -28,6 +28,13 @@ namespace _Scripts.LeaderBoard
             }
         }
 
+        public static async Task<List<IApiUser>> GetUsersFromUserId(NakamaConnection connection, List<IApiLeaderboardRecord> records)
+        {
+            var userIds = records.Select(record => record.OwnerId).ToList();
+            var users = await connection.Client.GetUsersAsync(connection.Session, userIds);
+            return users.Users.ToList();
+        }
+
         public static async Task<int> GetScoreOfThisUser(NakamaConnection connection, string leaderBoardId)
         {
             try

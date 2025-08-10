@@ -720,7 +720,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f42a8933f3648529364ace0fde6de8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  whoAmI: 0
   leaderboardRecordPrefab:
     m_AssetGUID: 5592315ec5867fc4e9730da21c172c3a
     m_SubObjectName: 
@@ -732,9 +731,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b42d969449bdb2045a9e3ba1c7ea8c07, type: 3}
   - {fileID: 21300000, guid: 5020ba3d400d2744c979f5ab46210700, type: 3}
   regularRank: {fileID: 21300000, guid: 03a8ef7c777c5794a9a5c6499edbe76f, type: 3}
-  record1: {fileID: 3430657071863229803}
-  record2: {fileID: 144676581691854597}
-  record3: {fileID: 5913678197317457482}
+  topThree:
+  - {fileID: 3430657071863229803}
+  - {fileID: 144676581691854597}
+  - {fileID: 5913678197317457482}
   recordsHolder: {fileID: 5649520842852700551}
   recordsViewArea: {fileID: 487562079802476522}
   playerRecordUpPlace: {fileID: 3862285636412362773}

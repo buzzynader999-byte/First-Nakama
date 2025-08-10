@@ -1,13 +1,13 @@
 using _Scripts.Managers;
 using _Scripts.Tools.Service_Locator;
-using RTLTMPro;
+//using RTLTMPro;
 using UnityEngine;
 
 public class DevTool : MonoBehaviour
 {
     [SerializeField] bool showDevTool = false;
     //[SerializeField] private GameConfig gameConfig;
-    [SerializeField] private RTLTextMeshPro rtlTextFixer;
+    //[SerializeField] private RTLTextMeshPro rtlTextFixer;
 
     bool showInfoLabel;
     string infoTextSize;
@@ -19,6 +19,11 @@ public class DevTool : MonoBehaviour
 
     private void OnGUI()
     {
+        if (Event.current.type == EventType.MouseDown)
+        {
+            Debug.Log("Mouse clicked at: " + Event.current.mousePosition);
+        }
+
         GUIStyle style = new GUIStyle(GUI.skin.button);
         style.normal.textColor = Color.white;
         style.active.textColor = Color.green;
@@ -48,10 +53,12 @@ public class DevTool : MonoBehaviour
 
             ipText = GUILayout.TextField(ipText, style, GUILayout.Height(Screen.height / 15),
                 GUILayout.Width(Screen.width / 2));
-            if (GUILayout.Button("ip", style, GUILayout.Height(Screen.height / 15), GUILayout.Width(Screen.width / 2)))
+            if (GUILayout.Button("ip", style, GUILayout.Height(Screen.height / 15),
+                    GUILayout.Width(Screen.width / 2)))
             {
-                GameManager.Instance.NakamaConnection.Host = ipText;
-                // save ip (playerPrefs) and retry
+                PlayerPrefs.SetString("nakama host", ipText);
+                var h = PlayerPrefs.GetString("nakama host", "0.0.0.0");
+                GameManager.Instance.NakamaConnection.Host = h;
             }
 
             GUILayout.EndHorizontal();
@@ -109,7 +116,8 @@ public class DevTool : MonoBehaviour
     private void ShowCloseBtn(GUIStyle gUIStyle)
     {
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Close", gUIStyle, GUILayout.Height(Screen.height / 15), GUILayout.Width(Screen.width)))
+        if (GUILayout.Button("Close", gUIStyle, GUILayout.Height(Screen.height / 15),
+                GUILayout.Width(Screen.width)))
         {
             showDevTool = false;
         }

@@ -84,7 +84,6 @@ namespace _Scripts
             var records = await LeaderBoardInterface.GetRecords(connection, leaderBoardId, null, null, limit);
             return records;
         }
-
         public async Task<IApiLeaderboardRecord> GetPlayerRank(string leaderboardId)
         {
             string ownerId = connection.UserId;
