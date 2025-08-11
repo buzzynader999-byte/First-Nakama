@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
 
-public class ClientCoordinator : Service
+public class ClientCoordinator : MonoService
 {
     #region Singleton
 
@@ -250,6 +250,16 @@ public class ClientCoordinator : Service
         {
             CloseOverlay(overlayList[i]);
         }
+    }
+
+    protected override void Register()
+    {
+        Services.Register(this);
+    }
+
+    protected override void UnRegister()
+    {
+        Services.Unregister<ClientCoordinator>();
     }
 }
 

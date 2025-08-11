@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Remote onnection
   m_EditorClassIdentifier: 
   scheme: http
-  host: 192.168.1.108
+  host: 192.168.1.150
   port: 7350
   key: defaultkey
   displayLogs: 1

@@ -1,5 +1,6 @@
 ﻿using System;
 using _Scripts.Managers;
+using _Scripts.Tools.Service_Locator;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -12,7 +13,7 @@ namespace _Scripts.UI.Elements
 
         [SerializeField] private TextMeshProUGUI userName;
 
-        private NakamaConnection _connection => GameManager.Instance.NakamaConnection;
+        private NakamaConnection Connection=>NetworkManager.Instance.Connection;
 
         private void OnEnable()
         {
@@ -27,7 +28,7 @@ namespace _Scripts.UI.Elements
 
         private async void OnDisplayNameChanged()
         {
-            var account = await _connection.Client.GetAccountAsync(_connection.Session);
+            var account = await Connection.Client.GetAccountAsync(Connection.Session);
             SetDisplayName(account.User.DisplayName);
             SetUsername(account.User.Username);
         }

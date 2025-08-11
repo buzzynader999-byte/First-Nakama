@@ -40,33 +40,36 @@ namespace _Scripts.LeaderBoard
         private RectTransform _playerEmptyPlaceInRecords;
         private bool _recordsCreated;
 
-        private NakamaConnection _connection => GameManager.Instance.NakamaConnection;
+        private NakamaConnection Connection => NetworkManager.Instance.Connection;
 
         private async void OnEnable()
         {
-            /*try
-            {*/
-            await GetLeaderboardRemainingTimeAsync("attack");
-            if (transform.childCount > 0)
-                foreach (Transform child in recordsHolder)
-                    Destroy(child.gameObject);
-
-            if (!_recordsCreated)
+            try
             {
-                if (!leaderboardRecordAsyncOperation.IsValid())
+                await GetLeaderboardRemainingTimeAsync("attack");
+                foreach (Transform child in recordsHolder)
                 {
-                    leaderboardRecordAsyncOperation = leaderboardRecordPrefab.LoadAssetAsync();
-                    await leaderboardRecordAsyncOperation.Task;
+                    if (child != null)
+                    {
+                        Destroy(child.gameObject);
+                    }
                 }
+                if (!_recordsCreated)
+                {
+                    if (!leaderboardRecordAsyncOperation.IsValid())
+                    {
+                        leaderboardRecordAsyncOperation = leaderboardRecordPrefab.LoadAssetAsync();
+                        await leaderboardRecordAsyncOperation.Task;
+                    }
 
-                await LeaderboardRecordAsyncOperationOnCompleted(leaderboardRecordAsyncOperation);
-                _recordsCreated = true;
+                    await LeaderboardRecordAsyncOperationOnCompleted(leaderboardRecordAsyncOperation);
+                    _recordsCreated = true;
+                }
             }
-            /*}
             catch (Exception e)
             {
-                Debug.Log(e);
-            }*/
+                Debug.LogError($"Error in OnEnable: {e.Message}");
+            }
         }
 
         private void OnDisable()
@@ -101,11 +104,11 @@ namespace _Scripts.LeaderBoard
                 return;
             }
 
-            var records = await ServiceLocator.Instance.Get<ScoreManager>().GetRecords("attack", 100);
-            var usersInLeaderBoard = await LeaderBoardInterface.GetUsersFromUserId(_connection, records);
+            var records = await Services.Get<ScoreManager>().GetRecords("attack", 100);
+            var usersInLeaderBoard = await LeaderBoardInterface.GetUsersFromUserId(Connection, records);
 
             if (records == null || records.Count == 0) return;
-            var playerRecord = await ServiceLocator.Instance.Get<ScoreManager>().GetPlayerRank("attack");
+            var playerRecord = await Services.Get<ScoreManager>().GetPlayerRank("attack");
 /*            if (whoAmI == WhoAmI.Original)
             {
                 _playerRecord = playerRecord;
@@ -117,7 +120,7 @@ namespace _Scripts.LeaderBoard
             }
 */
             _playerRecord = playerRecord;
-            myUsername = _connection.UserName;
+            myUsername = Connection.UserName;
             SetUpTopThree(topThree, records);
 
             // display other records
@@ -282,7 +285,7 @@ namespace _Scripts.LeaderBoard
 
         private async Task GetLeaderboardRemainingTimeAsync(string leaderboardId)
         {
-            var records = await LeaderBoardInterface.GetRecords(_connection, leaderboardId, null, null, 1);
+            var records = await LeaderBoardInterface.GetRecords(Connection, leaderboardId, null, null, 1);
             if (records?.Count >= 1)
             {
                 _leaderBoardExpiretime = records[0].ExpiryTime;

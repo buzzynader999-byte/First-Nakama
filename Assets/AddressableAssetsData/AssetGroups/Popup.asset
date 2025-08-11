@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3aa96f39cd0eeba479278d258534acfe
+    m_Address: Popup_Connecting
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6e1fa37312e041b43b3fca9d98bd076f
     m_Address: Popup_MatchMaking
     m_ReadOnly: 0

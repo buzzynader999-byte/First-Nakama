@@ -14,7 +14,7 @@ namespace _Scripts.UI
         private void OnEnable()
         {
             ScoreManager.onScoreChanged += OnScoreChanged;
-            var score = ServiceLocator.Instance.Get<ScoreManager>().CurrentScore;
+            var score = Services.Get<ScoreManager>().CurrentScore;
             OnScoreChanged(Mathf.Max(0, score));
         }
 

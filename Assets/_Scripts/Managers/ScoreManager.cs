@@ -12,9 +12,9 @@ using UnityEngine.InputSystem;
 
 namespace _Scripts
 {
-    public class ScoreManager : Service
+    public class ScoreManager : MonoService
     {
-        private NakamaConnection connection => GameManager.Instance.NakamaConnection;
+        private NakamaConnection _connection;
         public static Action<int> onScoreChanged;
         public static Action<int> onServerScoreChanged;
         public int CurrentScore { get; private set; }
@@ -23,25 +23,25 @@ namespace _Scripts
         private void OnEnable()
         {
             PlayerLocalNetwork.onPlayerAttacked += OnPlayerAttacked;
-            GameManager.OnConnectedToNakama += OnConnectedToNakama;
+            NetworkManager.OnConnectedToNakama += OnConnectedToNakama;
         }
 
+        private void OnDisable()
+        {
+            PlayerLocalNetwork.onPlayerAttacked -= OnPlayerAttacked;
+        }
         private async void OnConnectedToNakama()
         {
             try
             {
-                var loadedScore = await LeaderBoardInterface.GetScoreOfThisUser(connection, "attack");
+                _connection = NetworkManager.Instance.Connection;
+                var loadedScore = await LeaderBoardInterface.GetScoreOfThisUser(_connection, "attack");
                 onServerScoreChanged?.Invoke(loadedScore);
             }
             catch (Exception e)
             {
                 Debug.Log(e.Message);
             }
-        }
-
-        private void OnDisable()
-        {
-            PlayerLocalNetwork.onPlayerAttacked -= OnPlayerAttacked;
         }
 
         private void OnPlayerAttacked()
@@ -61,8 +61,8 @@ namespace _Scripts
             print("Trying to submit scores");
             try
             {
-                await connection.SubmitScore(CurrentScore);
-                ScoreInServer = await LeaderBoardInterface.GetScoreOfThisUser(connection, "attack");
+                await _connection.SubmitScore(CurrentScore);
+                ScoreInServer = await LeaderBoardInterface.GetScoreOfThisUser(_connection, "attack");
                 onServerScoreChanged?.Invoke(ScoreInServer);
             }
             catch (Exception e)
@@ -81,22 +81,31 @@ namespace _Scripts
 
         public async Task<List<IApiLeaderboardRecord>> GetRecords(string leaderBoardId, int limit)
         {
-            var records = await LeaderBoardInterface.GetRecords(connection, leaderBoardId, null, null, limit);
+            var records = await LeaderBoardInterface.GetRecords(_connection, leaderBoardId, null, null, limit);
             return records;
         }
         public async Task<IApiLeaderboardRecord> GetPlayerRank(string leaderboardId)
         {
-            string ownerId = connection.UserId;
-            var result = await connection.Client.ListLeaderboardRecordsAroundOwnerAsync(
-                connection.Session,
+            string ownerId = _connection.UserId;
+            var result = await _connection.Client.ListLeaderboardRecordsAroundOwnerAsync(
+                _connection.Session,
                 leaderboardId,
-                connection.UserId,
+                _connection.UserId,
                 limit: 1,
                 expiry: null
             );
 
             // پیدا کردن رنک خودتون
             return result.OwnerRecords.FirstOrDefault();
+        }
+        protected override void Register()
+        {
+            Services.Register(this);
+        }
+
+        protected override void UnRegister()
+        {
+            Services.Unregister<ScoreManager>();
         }
     }
 }

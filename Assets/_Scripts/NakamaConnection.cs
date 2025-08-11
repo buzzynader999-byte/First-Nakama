@@ -13,7 +13,6 @@ namespace _Scripts
         public string Host { set; get; }
         [SerializeField] private int port = 7350;
         [SerializeField] private string key = "defaultkey";
-        [SerializeField] private bool displayLogs;
 
         public IClient Client => _client;
         IClient _client;
@@ -21,13 +20,10 @@ namespace _Scripts
         ISocket _socket;
         public ISession Session => _session;
         ISession _session;
-        IMatch _match;
         public string UserId => _session.UserId;
         public string UserName => _session.Username;
-        public static Action OnSocketCreated;
+        public Action OnSocketCreated;
 
-        private string _ticket;
-        private string _matchID;
 
         public async Task<bool> Connect()
         {
@@ -49,7 +45,6 @@ namespace _Scripts
                 }
 
                 OnSocketCreated?.Invoke();
-                _socket.ReceivedMatchmakerMatched += OnReceivedMatchMakerMatched;
                 //_socket.ReceivedMatchState += OnReceivedMatchState;
 
                 await _socket.ConnectAsync(_session, appearOnline: true);
@@ -65,9 +60,8 @@ namespace _Scripts
             }
         }
 
-        public async Task FindMatch()
+        public async Task<string> FindMatch()
         {
-            LogIt("FindMatch");
             if (!_socket.IsConnected)
             {
                 _session = await _client.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier);
@@ -76,51 +70,12 @@ namespace _Scripts
             }
 
             var matchmakingTicker = await _socket.AddMatchmakerAsync("*", 2, 2, null, null);
-            _ticket = matchmakingTicker.Ticket;
+            return matchmakingTicker.Ticket;
         }
-
-        async void OnReceivedMatchMakerMatched(IMatchmakerMatched matchmaker)
-        {
-            try
-            {
-                LogIt("Found matchmaker");
-                _match = await _socket.JoinMatchAsync(matchmaker);
-                _matchID = _match.Id;
-                Debug.Log("joined matchmaker");
-                Debug.Log(_match.Self.SessionId);
-                foreach (var users in _match.Presences)
-                {
-                    LogIt(users.SessionId);
-                }
-            }
-            catch (Exception e)
-            {
-                LogIt(e.Message);
-            }
-        }
-
-        public void CancelMatchMaking()
-        {
-            _socket.RemoveMatchmakerAsync(_ticket);
-        }
-
-        public void LeaveMatch()
-        {
-            if (_match != null && _socket != null)
-                _socket.LeaveMatchAsync(_match);
-        }
-
+        
         public async Task SubmitScore(int newScore)
         {
             var r = await _client.WriteLeaderboardRecordAsync(_session, "attack", newScore);
-        }
-
-        void LogIt(object message)
-        {
-            if (displayLogs)
-            {
-                Debug.Log(message);
-            }
         }
     }
 }

@@ -9,13 +9,13 @@
         {
             public void LeaveGameNow()
             {
-                GameManager.Instance.Leavematch();
+                GameManager.Instance.LeaveMatch();
             }
 
             public void CloseOptions()
             {
-                ServiceLocator.Instance.Get<UIManager>().Close(this);
-                ServiceLocator.Instance.Get<UIManager>().OpenGameMenu();
+                Services.Get<UIManager>().Close(this);
+                Services.Get<UIManager>().OpenGameMenu();
             }
         }
     }

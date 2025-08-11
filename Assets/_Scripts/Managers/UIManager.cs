@@ -3,7 +3,7 @@ using _Scripts.UI.Elements;
 
 namespace _Scripts.Managers
 {
-    public class UIManager : Service
+    public class UIManager : MonoService
     {
         public static UIManager Instance { set; get; }
         ClientCoordinator _client => ClientCoordinator.Instance;
@@ -21,39 +21,39 @@ namespace _Scripts.Managers
             }
         }
 
-        public void OpenFindMatch()
+        public Overlay OpenFindMatch()
         {
-            _client.OpenOverlay<Popup_MatchMaking>(false, true);
+            return _client.OpenOverlay<Popup_MatchMaking>(false, true);
         }
 
-        public void OpenLeaderBoard()
+        public Overlay OpenLeaderBoard()
         {
-            _client.OpenOverlay<Panel_LeaderBoard>(false, true);
+            return _client.OpenOverlay<Panel_LeaderBoard>(false, true);
         }
 
         public void ExitGame()
         {
-            ScoreManager sM = ServiceLocator.Instance.Get<ScoreManager>();
+            ScoreManager sM = Services.Get<ScoreManager>();
             sM.SubmitScores();
             print("Added to scores in server | current score : " + sM.CurrentScore + " | Score in Server: " +
                   sM.ScoreInServer);
         }
 
-        public void OpenMainMenu()
+        public Overlay OpenMainMenu()
         {
             _client.Clear();
-            _client.OpenOverlay<Panel_MainMenu>();
+            return _client.OpenOverlay<Panel_MainMenu>();
         }
 
-        public void OpenGameMenu()
+        public Overlay OpenGameMenu()
         {
             _client.Clear();
-            _client.OpenOverlay<Panel_Game>();
+            return _client.OpenOverlay<Panel_Game>();
         }
 
-        public void OpenOptionsInGame()
+        public Overlay OpenOptionsInGame()
         {
-            _client.OpenOverlay<Popup_Options>();
+            return _client.OpenOverlay<Popup_Options>();
         }
 
         public void Close(Overlay target)
@@ -61,19 +61,35 @@ namespace _Scripts.Managers
             _client.CloseOverlay(target);
         }
 
-        public void OpenRetryConnection()
+        public Overlay OpenRetryConnection()
         {
-            _client.OpenOverlay<Popup_Retry>(false, true);
+            print("Opening retry popup");
+            return _client.OpenOverlay<Popup_Retry>(false, true);
         }
 
-        public void OpenProfile()
+        public Overlay OpenProfile()
         {
-            _client.OpenOverlay<Panel_Profile>(false, true);
+            return _client.OpenOverlay<Panel_Profile>(false, true);
         }
 
-        public void OpenRenamingPopup()
+        public Overlay OpenRenamingPopup()
         {
-            _client.OpenOverlay<Popup_Renaming>(false, true);
+            return _client.OpenOverlay<Popup_Renaming>(false, true);
+        }
+
+        public Overlay OpenConnectingPopup()
+        {
+            return _client.OpenOverlay<Popup_Connecting>(false, true);
+        }
+
+        protected override void Register()
+        {
+            Services.Register(this);
+        }
+
+        protected override void UnRegister()
+        {
+            Services.Unregister<UIManager>();
         }
     }
 }

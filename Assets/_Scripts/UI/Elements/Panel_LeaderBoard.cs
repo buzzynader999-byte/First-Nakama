@@ -7,7 +7,7 @@ namespace _Scripts.UI.Elements
     {
         public void CloseLeaderboard()
         {
-            ServiceLocator.Instance.Get<UIManager>().Close(this);
+            Services.Get<UIManager>().Close(this);
         }
     }
 }

@@ -8,31 +8,31 @@ namespace _Scripts.UI.Elements
     {
         public void FindMatch()
         {
-            ServiceLocator.Instance.Get<UIManager>().Close(this);
+            Services.Get<UIManager>().Close(this);
             GameManager.Instance.FindMatch();
         }
 
         public void OpenLeaderBoard()
         {
-            ServiceLocator.Instance.Get<UIManager>().OpenLeaderBoard();
+            Services.Get<UIManager>().OpenLeaderBoard();
         }
         public void Exit()
         {
-            ServiceLocator.Instance.Get<UIManager>().ExitGame();
+            Services.Get<UIManager>().ExitGame();
         }
         public void AddToScore()
         {
-            ServiceLocator.Instance.Get<ScoreManager>().AddScore(5);
+            Services.Get<ScoreManager>().AddScore(5);
         }
 
         public async void SubmitScore()
         {
-            await ServiceLocator.Instance.Get<ScoreManager>().SubmitScores();
+            await Services.Get<ScoreManager>().SubmitScores();
         }
 
         public void OpenProfile()
         {
-            ServiceLocator.Instance.Get<UIManager>().OpenProfile();
+            Services.Get<UIManager>().OpenProfile();
 
         }
     }

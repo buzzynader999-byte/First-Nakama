@@ -1,13 +1,18 @@
-﻿using _Scripts.Managers;
+﻿using System;
+using _Scripts.Managers;
+using _Scripts.Tools.Service_Locator;
+using UnityEngine;
 
 namespace _Scripts.UI.Elements
 {
-    public class Popup_Retry:Popup
+    public class Popup_Retry : Popup
     {
-        public void RetryConnection()
+        private NetworkManager Networdk=>NetworkManager.Instance;
+
+        public async void RetryConnection()
         {
             UIManager.Instance.Close(this);
-            GameManager.Instance.TryConnect();
+            await Networdk.TryConnect();
         }
     }
 }

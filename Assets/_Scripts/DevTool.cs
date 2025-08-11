@@ -58,7 +58,7 @@ public class DevTool : MonoBehaviour
             {
                 PlayerPrefs.SetString("nakama host", ipText);
                 var h = PlayerPrefs.GetString("nakama host", "0.0.0.0");
-                GameManager.Instance.NakamaConnection.Host = h;
+                Services.Get<NetworkManager>().Connection.Host = h;
             }
 
             GUILayout.EndHorizontal();

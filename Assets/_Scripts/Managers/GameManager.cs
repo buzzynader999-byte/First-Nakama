@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
 using _Scripts.PlayerScripts;
 using _Scripts.Tools;
 using _Scripts.Tools.Service_Locator;
-using _Scripts.UI;
 using Nakama;
 using UnityEngine;
 
@@ -11,45 +9,31 @@ namespace _Scripts.Managers
 {
     public class GameManager : MonoBehaviour
     {
-        [SerializeField] NakamaConnection nakamaConnection;
-        public NakamaConnection NakamaConnection => nakamaConnection;
-        private ISocket _socket => nakamaConnection.Socket;
-        public static Action OnConnectedToNakama;
-
+        private NetworkManager Network => NetworkManager.Instance;
         private IUserPresence _localUser;
         private IMatch _currentMatch;
         public static GameManager Instance;
+        private UnityMainThreadDispatcher _mainThread;
+        public UnityMainThreadDispatcher MainThread => _mainThread;
 
         private async void Awake()
         {
-            try
-            {
-                Instance = this;
-                await TryConnect();
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-            }
+            Instance = this;
+            await Network.TryConnect();
         }
 
         private void OnEnable()
         {
-            NakamaConnection.OnSocketCreated += SubscribeToSocket;
+            _mainThread = UnityMainThreadDispatcher.Instance();
+            Network.Connection.OnSocketCreated += OnSocketCreated;
         }
 
-        private void OnDisable()
+        private void OnSocketCreated()
         {
-            NakamaConnection.OnSocketCreated -= SubscribeToSocket;
-        }
-
-        void SubscribeToSocket()
-        {
-            var mainThread = UnityMainThreadDispatcher.Instance();
-            _socket.ReceivedMatchmakerMatched +=
-                m => mainThread.Enqueue(() => OnReceivedMatchmakerMatched(m));
-            _socket.ReceivedMatchPresence += m => mainThread.Enqueue(() => OnReceivedMatchPresence(m));
-            _socket.ReceivedMatchState += m => mainThread.Enqueue(() => OnReceivedMatchState(m));
+            Network.Socket.ReceivedMatchmakerMatched +=
+                m => _mainThread.Enqueue(() => OnReceivedMatchmakerMatched(m));
+            Network.Socket.ReceivedMatchPresence += m => _mainThread.Enqueue(() => OnReceivedMatchPresence(m));
+            Network.Socket.ReceivedMatchState += m => _mainThread.Enqueue(() => OnReceivedMatchState(m));
         }
 
         private void OnReceivedMatchState(IMatchState matchState)
@@ -74,7 +58,6 @@ namespace _Scripts.Managers
 
         private void OnReceivedMatchPresence(IMatchPresenceEvent matchPresenceEvent)
         {
-            print("Some one leaved or joined");
             foreach (var joinedOne in matchPresenceEvent.Joins)
             {
                 print(joinedOne.SessionId + " joined");
@@ -85,14 +68,6 @@ namespace _Scripts.Managers
             {
                 print(leaved.SessionId + " leaved");
                 PlayerSpawner.instance.Destroy(leaved.SessionId);
-                /*var players = PlayerSpawner.instance.Players;
-                if (players.Count == 1)
-                {
-                    if (players.ContainsKey(_localUser.SessionId))
-                    {
-                        Debug.Log("You Win");
-                    }
-                }*/
             }
         }
 
@@ -102,9 +77,9 @@ namespace _Scripts.Managers
             {
                 _localUser = matchmaker.Self.Presence;
                 print("Found matchmaker");
-                var match = await _socket.JoinMatchAsync(matchmaker);
+                var match = await Network.Socket.JoinMatchAsync(matchmaker);
                 print("joined matchmaker");
-                ServiceLocator.Instance.Get<UIManager>().OpenGameMenu();
+                Services.Get<UIManager>().OpenGameMenu();
                 //print(match.Self.SessionId);
                 foreach (var user in match.Presences)
                 {
@@ -143,55 +118,28 @@ namespace _Scripts.Managers
 
         private void PlayerDeath(GameObject targetPlayer)
         {
-            Debug.Log("Player Dead");
             SendMatchState(OpCodes.Died, MatchDataJson.Died(targetPlayer.transform.position));
         }
 
-        public void FindMatch()
+        public async void FindMatch()
         {
-            nakamaConnection.FindMatch();
-            ServiceLocator.Instance.Get<UIManager>().OpenFindMatch();
+            Services.Get<UIManager>().OpenFindMatch();
+            await Network.FindMatch();
         }
 
-        public void SendMatchState(long op, string state) => _socket.SendMatchStateAsync(_currentMatch.Id, op, state);
+        public void SendMatchState(long op, string state) =>
+            Network.Socket.SendMatchStateAsync(_currentMatch.Id, op, state);
 
         public void CancelMatchMaking()
         {
-            nakamaConnection.CancelMatchMaking();
-            ServiceLocator.Instance.Get<UIManager>().OpenMainMenu();
+            Network.CancelMatchMaking();
+            Services.Get<UIManager>().OpenMainMenu();
         }
 
-        public void Leavematch()
+        public void LeaveMatch()
         {
-            nakamaConnection.LeaveMatch();
-            ServiceLocator.Instance.Get<UIManager>().OpenMainMenu();
-        }
-
-        private void OnDestroy()
-        {
-            nakamaConnection.LeaveMatch();
-        }
-
-        public async Task TryConnect()
-        {
-            try
-            {
-                var status = await nakamaConnection.Connect();
-                if(status)
-                {
-                    ServiceLocator.Instance.Get<UIManager>().OpenMainMenu();
-                    OnConnectedToNakama?.Invoke();
-                }
-                else
-                {
-                    throw new Exception("Could not connect to nakama");
-                }
-            }
-            catch (Exception e)
-            {
-                UIManager.Instance.OpenRetryConnection();
-                Debug.Log(e);
-            }
+            Network.LeaveMatch();
+            Services.Get<UIManager>().OpenMainMenu();
         }
     }
 }

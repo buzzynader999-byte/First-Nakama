@@ -1,20 +1,23 @@
 ﻿using System;
 using _Scripts.Managers;
+using _Scripts.Tools.Service_Locator;
 using TMPro;
 using UnityEngine;
 
 namespace _Scripts.UI.Elements
 {
-    public class Popup_Renaming:Overlay
+    public class Popup_Renaming : Overlay
     {
-        private NakamaConnection _connection => GameManager.Instance.NakamaConnection;
+        private NakamaConnection Connection => NetworkManager.Instance.Connection;
         [SerializeField] private TMP_InputField userNameInput;
         public static Action onDisplayNameChanged;
+
+
         public void RenameUser()
         {
-            if(String.IsNullOrEmpty(userNameInput.text))return;
+            if (String.IsNullOrEmpty(userNameInput.text)) return;
             Debug.Log(userNameInput.text);
-            GameManager.Instance.NakamaConnection.Client.UpdateAccountAsync(_connection.Session, _connection.UserName,
+            Connection.Client.UpdateAccountAsync(Connection.Session, Connection.UserName,
                 userNameInput.text);
             onDisplayNameChanged?.Invoke();
         }

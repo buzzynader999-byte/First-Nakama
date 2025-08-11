@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using _Scripts.Managers;
+using _Scripts.Tools.Service_Locator;
 using Nakama;
 using Nakama.TinyJson;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace _Scripts.PlayerScripts
 
         private void Start()
         {
-            _gameManager.NakamaConnection.Socket.ReceivedMatchState += EnqueueOnReceivedMatchState;
+            NetworkManager.Instance.Socket.ReceivedMatchState += EnqueueOnReceivedMatchState;
         }
 
         private void EnqueueOnReceivedMatchState(IMatchState matchState)
@@ -99,7 +100,7 @@ namespace _Scripts.PlayerScripts
         {
             if (_gameManager != null)
             {
-                _gameManager.NakamaConnection.Socket.ReceivedMatchState -= EnqueueOnReceivedMatchState;
+                Services.Get<NetworkManager>().Socket.ReceivedMatchState -= EnqueueOnReceivedMatchState;
             }
         }
     }
