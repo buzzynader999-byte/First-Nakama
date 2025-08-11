@@ -1,7 +1,4 @@
-﻿using System;
-using _Scripts.Managers;
-using _Scripts.Tools.Service_Locator;
-using UnityEngine;
+﻿using _Scripts.Managers;
 
 namespace _Scripts.UI.Elements
 {

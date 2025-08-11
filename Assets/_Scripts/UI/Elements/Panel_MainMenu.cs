@@ -1,6 +1,5 @@
 using _Scripts.Managers;
 using _Scripts.Tools.Service_Locator;
-using UnityEngine;
 
 namespace _Scripts.UI.Elements
 {

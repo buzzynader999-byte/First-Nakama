@@ -1,13 +1,10 @@
 using _Scripts.Managers;
 using _Scripts.Tools.Service_Locator;
-//using RTLTMPro;
 using UnityEngine;
 
 public class DevTool : MonoBehaviour
 {
     [SerializeField] bool showDevTool = false;
-    //[SerializeField] private GameConfig gameConfig;
-    //[SerializeField] private RTLTextMeshPro rtlTextFixer;
 
     bool showInfoLabel;
     string infoTextSize;
@@ -50,7 +47,6 @@ public class DevTool : MonoBehaviour
 
 
             GUILayout.BeginHorizontal();
-
             ipText = GUILayout.TextField(ipText, style, GUILayout.Height(Screen.height / 15),
                 GUILayout.Width(Screen.width / 2));
             if (GUILayout.Button("ip", style, GUILayout.Height(Screen.height / 15),

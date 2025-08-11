@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-
+﻿
 namespace _Scripts
 {
     public static class GatherInput

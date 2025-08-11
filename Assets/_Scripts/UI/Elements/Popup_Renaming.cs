@@ -1,6 +1,5 @@
 ﻿using System;
 using _Scripts.Managers;
-using _Scripts.Tools.Service_Locator;
 using TMPro;
 using UnityEngine;
 

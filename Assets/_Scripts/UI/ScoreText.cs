@@ -1,8 +1,6 @@
-﻿using System;
-using _Scripts.Tools.Service_Locator;
+﻿using _Scripts.Tools.Service_Locator;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace _Scripts.UI
 {
