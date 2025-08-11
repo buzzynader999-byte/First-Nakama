@@ -9,17 +9,16 @@ namespace _Scripts.Managers
     public class NetworkManager : MonoService
     {
         [SerializeField] NakamaConnection connection;
-        private UnityMainThreadDispatcher _mainThread;
-
         [SerializeField] private bool displayLogs;
-        public static Action OnConnectedToNakama;
 
-        public NakamaConnection Connection => connection;
+        public static Action OnConnectedToNakama;
         public static NetworkManager Instance;
+        public NakamaConnection Connection => connection;
         public ISocket Socket => connection.Socket;
+        IMatch _match;
         private string _ticket;
         private string _matchID;
-        IMatch _match;
+        private UnityMainThreadDispatcher _mainThread;
 
         private void Awake()
         {

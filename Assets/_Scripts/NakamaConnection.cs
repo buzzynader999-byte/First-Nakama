@@ -10,9 +10,14 @@ namespace _Scripts
     {
         [SerializeField] private string scheme = "http";
         [SerializeField] private string host = "localhost";
-        public string Host { set; get; }
         [SerializeField] private int port = 7350;
         [SerializeField] private string key = "defaultkey";
+
+        public string Host
+        {
+            set => host = value;
+            get => host;
+        }
 
         public IClient Client => _client;
         IClient _client;
@@ -23,14 +28,30 @@ namespace _Scripts
         public string UserId => _session.UserId;
         public string UserName => _session.Username;
         public Action OnSocketCreated;
-
+        private const string SessionPrefName = "nakama.session";
+        private const string DeviceIdentifierPrefName = "nakama.deviceUniqueIdentifier";
 
         public async Task<bool> Connect()
         {
             try
             {
                 _client = new Client(scheme, host, port, key, UnityWebRequestAdapter.Instance);
-                _session = await _client.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier);
+                var authToken = PlayerPrefs.GetString(SessionPrefName);
+                if (!string.IsNullOrEmpty(authToken))
+                {
+                    var session = Nakama.Session.Restore(authToken);
+                    if (!session.IsExpired)
+                    {
+                        _session = session;
+                    }
+                }
+
+                if (_session == null)
+                {
+                    string deviceId = GetDeviceId();
+                    _session = await Client.AuthenticateDeviceAsync(deviceId);
+                    PlayerPrefs.SetString(SessionPrefName, _session.AuthToken);
+                }
                 if (_session == null || _session.IsExpired)
                 {
                     Debug.LogError("Authentication failed or session is expired");
@@ -46,7 +67,6 @@ namespace _Scripts
 
                 OnSocketCreated?.Invoke();
                 //_socket.ReceivedMatchState += OnReceivedMatchState;
-
                 await _socket.ConnectAsync(_session, appearOnline: true);
                 Debug.Log($"Session: {_session}");
                 Debug.Log($"Socket: {_socket}");
@@ -72,10 +92,30 @@ namespace _Scripts
             var matchmakingTicker = await _socket.AddMatchmakerAsync("*", 2, 2, null, null);
             return matchmakingTicker.Ticket;
         }
-        
+
         public async Task SubmitScore(int newScore)
         {
             var r = await _client.WriteLeaderboardRecordAsync(_session, "attack", newScore);
+        }
+
+        string GetDeviceId()
+        {
+            string deviceId;
+            if (PlayerPrefs.HasKey(DeviceIdentifierPrefName))
+            {
+                deviceId = PlayerPrefs.GetString(DeviceIdentifierPrefName);
+            }
+            else
+            {
+                deviceId = SystemInfo.deviceUniqueIdentifier;
+                if (deviceId == SystemInfo.unsupportedIdentifier)
+                {
+                    deviceId = System.Guid.NewGuid().ToString();
+                }
+                PlayerPrefs.SetString(DeviceIdentifierPrefName, deviceId);
+            }
+
+            return deviceId;
         }
     }
 }
